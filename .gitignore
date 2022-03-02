@@ -14,15 +14,10 @@
 # It is important to avoid ignoring any of the parent folders of a non-ignored sub-folder      #
 ################################################################################################
 
-log/**
-temp/**
-bin/
-
 
 ######################
 #       HYBRIS       #
 ######################
-/hybris/*
 
 ====================
 #      Licence     #

@@ -1,0 +1,12 @@
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Online])[default = $contentCatalog:Online]
+
+
+# antonas look at me - add products back here or not?#
+INSERT_UPDATE ProductCarouselComponent; $contentCV[unique = true]; uid[unique = true]             ; name                             ; displayMostPurchasedProducts; &componentRef
+                                      ;                          ; MostPurchasedCarouselComponent ; Most Purchased Products Carousel ; true                        ; MostPurchasedCarouselComponent
+
+
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]             ; name                        ; active; cmsComponents(&componentRef)
+                         ;                          ; Section1Slot-Homepage          ; Section1 Slot for Homepage  ; true  ; ChedrauiHomepageCarouselComponent, YMKT_REC_MOST_VIEWED, MostPurchasedCarouselComponent

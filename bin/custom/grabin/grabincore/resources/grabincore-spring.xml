@@ -1,0 +1,825 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2018 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+     <context:annotation-config/>
+
+	<bean id="grabinProjectLoadMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="tewProjectLoadInterceptor"/>
+		<property name="typeCode" value="Project"/>
+	</bean>
+	<bean id="grabinProjectInitMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="tewProjectInitDefaultsInterceptor"/>
+		<property name="typeCode" value="Project"/>
+	</bean>
+	<bean id="grabinProjectValidateMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="tewProjectValidateInterceptor"/>
+		<property name="typeCode" value="Project"/>
+	</bean>
+	<bean id="grabinProjectPrepareMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="tewProjectPrepareInterceptor"/>
+		<property name="typeCode" value="Project"/>
+	</bean>
+	<bean id="grabinProjectRemoveMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="tewProjectRemoveInterceptor"/>
+		<property name="typeCode" value="Project"/>
+	</bean>
+
+	<bean id="tewProjectInitDefaultsInterceptor" class="com.paulograbin.core.tew.project.TewProjectInitDefaultsInterceptor"/>
+	<bean id="tewProjectLoadInterceptor" class="com.paulograbin.core.tew.project.TewProjectLoadInterceptor"/>
+	<bean id="tewProjectPrepareInterceptor" class="com.paulograbin.core.tew.project.TewProjectPrepareInterceptor"/>
+	<bean id="tewProjectRemoveInterceptor" class="com.paulograbin.core.tew.project.TewProjectRemoveInterceptor"/>
+	<bean id="tewProjectValidateInterceptor" class="com.paulograbin.core.tew.project.TewProjectValidateInterceptor"/>
+
+
+	<alias name="defaultProjectDao" alias="projectDao"/>
+	<bean name="defaultProjectDao" class="com.paulograbin.core.tew.dao.DefaultProjectDao"/>
+
+	<alias name="genericProjectDao" alias="anotherProjectDao"/>
+	<bean name="genericProjectDao" class="de.hybris.platform.servicelayer.internal.dao.DefaultGenericDao">
+		<constructor-arg value="#{T(com.paulograbin.core.model.ProjectModel)._TYPECODE}"/>
+	</bean>
+
+
+
+	<alias alias="environmentConfigurationDao" name="defaultEnvironmentConfigurationDao"/>
+	<bean id="defaultEnvironmentConfigurationDao" class="com.paulograbin.core.configuration.DefaultConfigurationDao" />
+
+
+	<alias name="defaultGrabinService" alias="grabinService"/>
+	<bean id="defaultGrabinService" class="com.paulograbin.core.tew.services.DefaultGrabinService">
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+    <alias name="defaultRandomService" alias="randomService"/>
+    <bean id="defaultRandomService" class="com.paulograbin.core.tew.services.DefaultRandomService">
+    </bean>
+
+	<alias name="defaultTestService" alias="testService"/>
+	<bean id="defaultTestService" class="com.paulograbin.core.tew.DefaultTestService">
+	</bean>
+
+	<alias name="asyncTestService" alias="testService"/>
+	<bean id="asyncTestService" class="com.paulograbin.core.tew.AsyncTestService">
+	</bean>
+
+	<alias name="injectedOnTestService" alias="injectedOnTestService"/>
+	<bean id="injectedOnTestService" class="com.paulograbin.core.tew.DefaultInjectedOnTestService">
+		<property name="testService" ref="testService"/>
+	</bean>
+
+
+	<alias name="defaultGrabinOrderCalculationMethodHook" alias="grabinOrderCalculationMethodHook"/>
+	<bean id="defaultGrabinOrderCalculationMethodHook" class="com.paulograbin.core.order.hook.calculation.GrabinOrderCalculationMethodHook"/>
+
+	<bean id="belcorpOfferDeactivationCalculationMethodHookMergeDirective" depends-on="commerceCartCalculationMethodHooks" parent="listMergeDirective">
+		<property name="add" ref="grabinOrderCalculationMethodHook"/>
+	</bean>
+
+
+
+	<alias name="defaultImpexSpitterFactory" alias="impexSpitterFactory"/>
+	<bean id="defaultImpexSpitterFactory" class="com.paulograbin.core.impex.impl.DefaultImpexSpitterFactory"/>
+
+
+
+	<alias name="defaultImpexHeaderGenerationService" alias="impexHeaderGenerationService"/>
+	<bean id="defaultImpexHeaderGenerationService" class="com.paulograbin.core.impex.impl.DefaultImpexHeaderGenerationService"/>
+
+
+
+
+
+
+
+	<alias name="defaultMostPurchasedProductsService" alias="mostPurchasedProductsService"/>
+	<bean id="defaultMostPurchasedProductsService" class="com.paulograbin.core.mostpurchasedproducts.impl.DefaultMostPurchasedProductsService">
+<!--		<property name="orderService" ref="orderService"/>-->
+<!--		<property name="unitService" ref="unitService"/>-->
+<!--		<property name="baseStoreService" ref="baseStoreService"/>-->
+	</bean>
+
+
+	<bean id="grabinAlertJob" class="com.paulograbin.core.cronjobs.GrabinAlertJob" parent="abstractJobPerformable">
+<!--		<property name="modelService" ref="modelService"/>-->
+<!--		<property name="flexibleSearchService" ref="flexibleSearchService"/>-->
+<!--		<property name="sessionService" ref="sessionService"/>-->
+	</bean>
+
+	<bean id="grabinRandomNumberJob" class="com.paulograbin.core.tew.jobs.GrabinRandomNumberSetterJob" parent="abstractJobPerformable">
+	</bean>
+
+<!--	<bean id="grabinAnotherRandomNumberJob" class="com.paulograbin.core.tew.jobs.GrabinAnotherRandomNumberSetterJob"/>-->
+
+
+
+	<bean id="GrabinBeforeCronJobStartEventListener" class="com.paulograbin.core.cronjobs.GrabinBeforeCronJobStartEventListener" parent="abstractEventListener">
+	</bean>
+	<bean id="GrabinAfterCronJobStartEventListener" class="com.paulograbin.core.cronjobs.GrabinAfterCronJobStartEventListener" parent="abstractEventListener">
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+
+
+
+
+
+
+
+
+
+		<bean id="abstractSurvivorshipActionJob" abstract="true" class="com.paulograbin.core.workflow.AbstractSurvivorshipActionJob">
+		<property name="catalogSynchronizationService" ref="catalogSynchronizationService" />
+		<property name="cronJobService" ref="cronJobService" />
+		<property name="sourceToCatalogMap">
+			<map>
+				<entry key="External_Part_Desc_BatchSurvivorship" value="sync Staged ExternalPartDesc productCatalog:Batch->Arrow"/>
+				<entry key="Npi_BatchSurvivorship" value="sync Staged NewProductIndicator productCatalog:Batch->Arrow"/>
+				<entry key="NonBatch" value="sync Staged productCatalog:NonBatch->Arrow"/>
+			</map>
+		</property>
+	</bean>
+
+	<alias name="survivorshipApprovalActionJob" alias="survivorshipApprovalActionJob"/>
+	<bean id="survivorshipApprovalActionJob" parent="abstractSurvivorshipActionJob"
+		  class="com.paulograbin.core.workflow.SurvivorshipApprovalActionJob">
+	</bean>
+
+	<alias name="survivorshipRejectActionJob" alias="survivorshipRejectActionJob"/>
+	<bean id="survivorshipRejectActionJob" parent="abstractSurvivorshipActionJob"
+		  class="com.paulograbin.core.workflow.SurvivorshipRejectActionJob"/>
+
+
+
+
+
+
+
+
+
+
+
+
+	<!--
+
+            ORDER PROCESS
+
+    -->
+	<bean id="grabinProcessDefinitionResource" class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+		<property name="resource" value="classpath:/grabincore/processes/grabin-process.xml"/>
+	</bean>
+
+	<bean id="alertOwnerAction" class="com.paulograbin.core.process.GrabinAlertOwnerAction" parent="abstractAction">
+
+	</bean>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!--
+
+            SOLR
+
+    -->
+
+	<bean id="grabinProjectIdentityProvider" class="com.paulograbin.core.solr.GrabinIdentityProvider"/>
+
+	<bean id="grabinProjectNameValueProvider" class="com.paulograbin.core.solr.GrabinProjectNameValueProvider">
+		<property name="i18nService" ref="i18nService" />
+	</bean>
+
+	<bean id="productUrlsValueResolver" class="com.paulograbin.core.solr.GrabinAnotherValueProvider" parent="abstractValueResolver"/>
+	<bean id="grabinThirdAttemptValueResolver" class="com.paulograbin.core.solr.GrabinThirdAttemptValueProvider"/>
+
+
+	<bean id="grabinTextoLocalizadoValueProvider" class="com.paulograbin.core.solr.GrabinTextoLocalizadoValueProvider" parent="abstractPropertyFieldValueProvider">
+
+	</bean>
+
+
+
+
+
+	<bean id="grabinFacetSearchSessionInitializationListenerDefinition" parent="solrListenerDefinition">
+		<property name="priority" value="1200" />
+		<property name="listener" ref="grabinInitializationListener" />
+	</bean>
+
+
+	<bean id="grabinInitializationListener" class="com.paulograbin.core.solr.GrabinIndexerQueryListener">
+	</bean>
+	<!--
+
+            CLEAN UP STRATEGIES
+
+    -->
+
+<!--	<bean id="chedrauiCleanupSavedValuesPerformable" parent="cleanupSavedValuesPerformable">-->
+<!--		<property name="maintenanceCleanupStrategy">-->
+<!--			<bean class="mx.com.chedraui.core.maintenance.ChedrauiSavedValuesStrategy">-->
+<!--				<property name="flexibleSearchService" ref="flexibleSearchService"/>-->
+<!--				<property name="modelService" ref="modelService"/>-->
+<!--			</bean>-->
+<!--		</property>-->
+<!--	</bean>-->
+
+	<bean id="chedrauiCleanupTaskLogsPerformable" parent="abstractGenericMaintenanceJobPerformable">
+		<property name="maintenanceCleanupStrategy">
+			<bean class="com.paulograbin.core.cleanup.GrabinProjectCleanupStrategy">
+				<property name="modelService" ref="modelService"/>
+				<property name="flexibleSearchService" ref="flexibleSearchService"/>
+				<property name="returnCode">
+					<set>
+						<value type="java.lang.String">OK</value>
+						<value type="java.lang.String">NOK</value>
+					</set>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- Spring Integration -->
+	<import resource="classpath:/grabincore/integration/hot-folder-store-electronics-spring.xml"/>
+	<import resource="classpath:/grabincore/integration/hot-folder-store-apparel-spring.xml"/>
+	<import resource="classpath:/grabincore/integration/hot-folder-store-grabin-spring.xml"/>
+	<import resource="classpath:/grabincore/integration/hot-folder-common-spring.xml"/>
+
+	<!-- SystemSetup for the GrabinCore -->
+	<bean id="acceleratorCoreSystemSetup" class="com.paulograbin.core.setup.CoreSystemSetup"
+	       parent="abstractCoreSystemSetup"/>
+
+	<!-- Solr field value providers -->
+
+	<bean id="volumeAwareProductPriceValueProvider" class="com.paulograbin.core.search.solrfacetsearch.provider.impl.VolumeAwareProductPriceValueProvider"  parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="priceService" ref="priceService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="sessionService" ref="sessionService"/>
+        <property name="userService" ref="userService"/>
+        <property name="priceComparator" ref="volumePriceComparator"/>
+        <property name="catalogVersionService" ref="catalogVersionService"/>
+    </bean>
+
+    <bean id="volumePriceComparator" class="com.paulograbin.core.comparators.VolumeAwarePriceInformationComparator" scope="singleton"/>
+
+    <bean id="productVolumePricesProvider" class="com.paulograbin.core.search.solrfacetsearch.provider.impl.ProductVolumePricesProvider"  parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="priceService" ref="priceService"/>
+    </bean>
+
+
+	<bean id="electronicsCategorySource" parent="abstractCategorySource">
+		<property name="rootCategory" value="1"/>
+		<!-- '1' is the root icecat category -->
+	</bean>
+	<bean id="electronicsBrandCategorySource" parent="abstractCategorySource">
+		<property name="rootCategory" value="brands"/>
+		<!-- 'brands' is the root of the brands hierarchy -->
+	</bean>
+
+	<bean id="apparelCategorySource" parent="abstractCategorySource">
+		<property name="rootCategory" value="categories"/>
+		<!-- 'categories' is the root apparel category -->
+	</bean>
+	<bean id="apparelBrandCategorySource" parent="abstractCategorySource">
+		<property name="rootCategory" value="brands"/>
+		<!-- 'brands' is the root of the brands hierarchy -->
+	</bean>
+	<bean id="apparelCollectionCategorySource" parent="abstractCategorySource">
+		<property name="rootCategory" value="collections"/> <!-- 'collections' is the root of the collections hierarchy -->
+	</bean>
+
+	<bean id="abstractCategoryCodeValueProvider" abstract="true"
+	      class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.CategoryCodeValueProvider"
+	      parent="abstractPropertyFieldValueProvider" >
+		<property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+	</bean>
+	<bean id="abstractCategoryNameValueProvider" abstract="true"
+	      class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.CategoryNameValueProvider"
+	      parent="abstractPropertyFieldValueProvider" >
+		<property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+	</bean>
+
+	<bean id="electronicsCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+		<property name="categorySource" ref="electronicsCategorySource"/>
+	</bean>
+	<bean id="electronicsBrandCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+		<property name="categorySource" ref="electronicsBrandCategorySource"/>
+	</bean>
+	<bean id="electronicsCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+		<property name="categorySource" ref="electronicsCategorySource"/>
+	</bean>
+	<bean id="electronicsBrandCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+		<property name="categorySource" ref="electronicsBrandCategorySource"/>
+	</bean>
+
+	<bean id="apparelCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+		<property name="categorySource" ref="apparelCategorySource"/>
+	</bean>
+	<bean id="apparelBrandCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+		<property name="categorySource" ref="apparelBrandCategorySource"/>
+	</bean>
+	<bean id="apparelCollectionCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+		<property name="categorySource" ref="apparelCollectionCategorySource"/>
+	</bean>
+	<bean id="apparelCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+		<property name="categorySource" ref="apparelCategorySource"/>
+	</bean>
+	<bean id="apparelBrandCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+		<property name="categorySource" ref="apparelBrandCategorySource"/>
+	</bean>
+	<bean id="apparelCollectionCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+		<property name="categorySource" ref="apparelCollectionCategorySource"/>
+	</bean>
+
+	<bean id="image515ValueProvider" parent="abstractImageValueProvider" >
+		<property name="mediaFormat" value="515Wx515H"/>
+	</bean>
+	<bean id="image300ValueProvider" parent="abstractImageValueProvider" >
+		<property name="mediaFormat" value="300Wx300H"/>
+	</bean>
+	<bean id="image96ValueProvider" parent="abstractImageValueProvider" >
+		<property name="mediaFormat" value="96Wx96H"/>
+	</bean>
+	<bean id="image65ValueProvider" parent="abstractImageValueProvider" >
+		<property name="mediaFormat" value="65Wx65H"/>
+	</bean>
+	<bean id="image30ValueProvider" parent="abstractImageValueProvider" >
+		<property name="mediaFormat" value="30Wx30H"/>
+	</bean>
+
+	<bean id="productUrlValueProvider"
+	      class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.ProductUrlValueProvider"
+	      parent="abstractPropertyFieldValueProvider" >
+		<property name="urlResolver" ref="productModelUrlResolver"/>
+		<property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+		<property name="i18nService" ref="i18nService"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+	</bean>
+
+	<bean id="promotionCodeValueProvider"
+	      class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.PromotionCodeValueProvider"
+	      parent="abstractPropertyFieldValueProvider" >
+		<property name="promotionsService" ref="promotionsService"/>
+		<property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+	</bean>
+
+	<bean id="promotionImageValueProvider"
+	      class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.PrimaryPromotionImageValueProvider"
+	      parent="abstractPropertyFieldValueProvider" >
+		<property name="promotionsService" ref="promotionsService"/>
+		<property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+	</bean>
+
+	<bean id="colorFacetValueProvider"
+	      class="com.paulograbin.core.search.solrfacetsearch.provider.impl.ColorFacetValueProvider"
+	       parent="abstractPropertyFieldValueProvider">
+		<property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+	</bean>
+
+	<bean id="colorFacetDisplayNameProvider"
+	      class="com.paulograbin.core.search.solrfacetsearch.provider.impl.ColorFacetDisplayNameProvider"
+	      >
+		<property name="enumerationService" ref="enumerationService"/>
+		<property name="i18nService" ref="i18nService"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+	</bean>
+
+	<bean id="apparelPointOfServiceFacetDisplayNameProvider"
+	      class="com.paulograbin.core.search.solrfacetsearch.provider.impl.PointOfServiceFacetDisplayNameProvider"
+	      >
+		<property name="pointOfServiceService" ref="pointOfServiceService"/>
+	</bean>
+
+	<bean id="electronicsPointOfServiceFacetDisplayNameProvider"
+	      class="com.paulograbin.core.search.solrfacetsearch.provider.impl.PointOfServiceFacetDisplayNameProvider"
+	      >
+		<property name="pointOfServiceService" ref="pointOfServiceService"/>
+	</bean>
+
+	<bean id="genderValueProvider"
+	      class="com.paulograbin.core.search.solrfacetsearch.provider.impl.GenderValueProvider"
+	       parent="abstractPropertyFieldValueProvider">
+		<property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+	</bean>
+
+	<bean id="genderFacetDisplayNameProvider"
+	      class="com.paulograbin.core.search.solrfacetsearch.provider.impl.GenderFacetDisplayNameProvider"
+	      >
+		<property name="enumerationService" ref="enumerationService"/>
+		<property name="i18nService" ref="i18nService"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+	</bean>
+
+	<!--
+		Event listeners are singletons, therefore the dependency for a bean in tenant-scope
+		must be configured with a lookup method.
+	-->
+	<bean id="orderCancelledEventListener"
+	      class="com.paulograbin.core.event.OrderCancelledEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="orderRefundEventListener"
+	      class="com.paulograbin.core.event.OrderRefundEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="customerRegistrationEventListener"
+	      class="com.paulograbin.core.event.RegistrationEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="forgottenPasswordEventListener"
+	      class="com.paulograbin.core.event.ForgottenPasswordEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="submitOrderEventListener" class="com.paulograbin.core.event.SubmitOrderEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="businessProcessService" ref="businessProcessService"/>
+		<property name="modelService" ref="modelService"/>
+		<property name="baseStoreService" ref="baseStoreService"/>
+	</bean>
+	<bean id="orderConfirmationEventListener"
+	      class="com.paulograbin.core.event.OrderConfirmationEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="sendDeliveryMessageEventListener"
+	      class="com.paulograbin.core.event.SendDeliveryMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="sendReadyForPickupMessageEventListener"
+	      class="com.paulograbin.core.event.SendReadyForPickupMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="sendOrderPartiallyCanceledMessageEventListener"
+	      class="com.paulograbin.core.event.SendOrderPartiallyCanceledMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="sendOrderPartiallyRefundedMessageEventListener"
+	      class="com.paulograbin.core.event.SendOrderPartiallyRefundedMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="sendNotPickedUpConsignmentCanceledMessageEventListener"
+	      class="com.paulograbin.core.event.SendNotPickedUpConsignmentCanceledMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+	<bean id="orderCompletedEventListener" class="com.paulograbin.core.event.OrderCompletedEventListener" parent="abstractAcceleratorSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+
+	<!-- Process resources definition -->
+
+	<bean id="customerRegistrationEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/customerRegistrationEmailProcess.xml"/>
+	</bean>
+	<bean id="forgottenPasswordEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/forgottenPasswordEmailProcess.xml"/>
+	</bean>
+	<bean id="orderConfirmationEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/orderConfirmationEmailProcess.xml"/>
+	</bean>
+	<bean id="sendDeliveryEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/sendDeliveryEmailProcess.xml"/>
+	</bean>
+	<bean id="sendReadyForPickupEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/sendReadyForPickupEmailProcess.xml"/>
+	</bean>
+	<bean id="sendOrderCancelledEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/sendOrderCancelledEmailProcess.xml"/>
+	</bean>
+	<bean id="sendOrderRefundEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/sendOrderRefundEmailProcess.xml"/>
+	</bean>
+	<bean id="sendOrderPartiallyCanceledEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/sendOrderPartiallyCanceledEmailProcess.xml"/>
+	</bean>
+	<bean id="sendOrderPartiallyRefundedEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/sendOrderPartiallyRefundedEmailProcess.xml"/>
+	</bean>
+	<bean id="sendNotPickedUpConsignmentCanceledEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/sendNotPickedUpConsignmentCanceledEmailProcess.xml"/>
+	</bean>
+
+	<!-- Actions -->
+	<bean id="abstractAction" class="de.hybris.platform.processengine.action.AbstractAction"
+	      abstract="true">
+		<property name="modelService" ref="modelService"/>
+		<property name="processParameterHelper" ref="processParameterHelper"/>
+	</bean>
+
+	<bean id="sendEmail" class="de.hybris.platform.acceleratorservices.process.email.actions.SendEmailAction"
+	       parent="abstractAction">
+		<property name="emailService" ref="emailService"/>
+	</bean>
+
+	<bean id="abstractGenerateEmailAction" class="de.hybris.platform.acceleratorservices.process.email.actions.GenerateEmailAction"
+	      parent="abstractAction" abstract="true">
+		<property name="modelService" ref="modelService"/>
+		<property name="cmsEmailPageService" ref="cmsEmailPageService"/>
+		<property name="contextResolutionStrategy" ref="processContextResolutionStrategy"/>
+		<property name="emailGenerationService" ref="emailGenerationService"/>
+	</bean>
+
+	<bean id="generateCustomerRegistrationEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="CustomerRegistrationEmailTemplate"/>
+	</bean>
+
+	<bean id="generateForgottenPasswordEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="ForgottenPasswordEmailTemplate"/>
+	</bean>
+
+	<bean id="generateOrderConfirmationEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="OrderConfirmationEmailTemplate"/>
+	</bean>
+
+	<bean id="generateDeliverySentEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="DeliverySentEmailTemplate"/>
+	</bean>
+
+	<bean id="generateReadyForPickupEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="ReadyForPickupEmailTemplate"/>
+	</bean>
+
+	<bean id="generateOrderCancelledEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="OrderCancelledEmailTemplate"/>
+	</bean>
+
+	<bean id="generateOrderRefundEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="OrderRefundEmailTemplate"/>
+	</bean>
+
+	<bean id="generateOrderPartiallyCanceledEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="OrderPartiallyCanceledEmailTemplate"/>
+	</bean>
+	<bean id="generateOrderPartiallyRefundedEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="OrderPartiallyRefundedEmailTemplate"/>
+	</bean>
+	<bean id="generateNotPickedUpConsignmentCanceledEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="NotPickedUpConsignmentCanceledEmailTemplate"/>
+	</bean>
+
+	<bean id="removeSentEmail"
+	      class="de.hybris.platform.acceleratorservices.process.email.actions.RemoveSentEmailAction"
+	      parent="abstractAction">
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+    <bean id="markQuoteNotificationAsSent"
+          class="com.paulograbin.core.actions.quote.MarkQuoteNotificationAsSentAction"
+          parent="abstractAction" abstract="true">
+        <property name="quoteService" ref="quoteService"/>
+    </bean>
+
+	<!-- Simple Suggestion Service -->
+	<alias alias="simpleSuggestionService" name="defaultSimpleSuggestionService"/>
+	<bean id="defaultSimpleSuggestionService"
+	      class="com.paulograbin.core.suggestion.impl.DefaultSimpleSuggestionService" >
+		<property name="simpleSuggestionDao" ref="simpleSuggestionDao"/>
+	</bean>
+	<alias alias="simpleSuggestionDao" name="defaultSimpleSuggestionDao"/>
+	<bean id="defaultSimpleSuggestionDao"
+	      class="com.paulograbin.core.suggestion.dao.impl.DefaultSimpleSuggestionDao"
+	      parent="abstractItemDao" >
+		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+	</bean>
+
+	<bean id="mccSiteUrlHelper" class="com.paulograbin.core.util.MccSiteUrlHelper" >
+		<property name="siteChannelValidationStrategy" ref="siteChannelValidationStrategy"/>
+		<property name="siteBaseUrlResolutionService" ref="siteBaseUrlResolutionService"/>
+		<property name="cmsSiteService" ref="cmsSiteService"/>
+	</bean>
+
+	<!-- Product Reference Lookup Strategies-->
+	<alias name="apparelCrossSellingProductReferenceTargetStrategy" alias="crossSellingProductReferenceTargetStrategy"/>
+	<bean id="apparelCrossSellingProductReferenceTargetStrategy"
+	      parent="defaultCrossSellingProductReferenceTargetStrategy">
+		<property name="productReferenceTargetStrategies">
+			<list merge="true">
+				<ref bean="apparelSizeProductReferenceTargetStrategy"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="apparelSizeProductReferenceTargetStrategy"
+	      class="com.paulograbin.core.strategies.impl.ApparelSizeProductReferenceTargetStrategy">
+		<property name="commerceCategoryService" ref="commerceCategoryService"/>
+		<property name="rootCategoryCode" value="categories"/>
+	</bean>
+
+	<!-- Sales quote process actions -->
+
+	<!-- quote-->
+	<bean id="quoteBuyerSubmitEventListener" class="com.paulograbin.core.event.QuoteBuyerSubmitEventListener"
+		  parent="abstractEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+
+	<bean id="quoteSalesRepSubmitEventListener" class="com.paulograbin.core.event.QuoteSalesRepSubmitEventListener"
+		  parent="abstractEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+
+	<bean id="quoteSellerApprovalSubmitEventListener" class="com.paulograbin.core.event.QuoteSellerApprovalSubmitEventListener"
+		  parent="abstractEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+
+	<bean id="quoteBuyerOrderPlacedEventListener" class="com.paulograbin.core.event.QuoteBuyerOrderPlacedEventListener"
+		  parent="abstractEventListener">
+		<property name="commerceQuoteService" ref="commerceQuoteService"/>
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+	<bean id="quoteToExpireSoonEventListener" class="com.paulograbin.core.event.QuoteToExpireSoonEventListener"
+		  parent="abstractEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+
+	<bean id="quoteExpiredEventListener" class="com.paulograbin.core.event.QuoteExpiredEventListener"
+		  parent="abstractEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+
+	<bean id="quoteCancelEventListener" class="com.paulograbin.core.event.QuoteCancelEventListener"
+		  parent="abstractEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
+
+	<bean id="quoteBuyerProcessDefinitionResource"
+		  class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/quote/quote-buyer-process.xml"/>
+	</bean>
+
+	<bean id="quoteSalesRepProcessDefinitionResource"
+		  class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/quote/quote-salesrep-process.xml"/>
+	</bean>
+
+
+	<bean id="quoteSellerApprovalProcessDefinitionResource"
+		  class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/quote/quote-seller-approval-process.xml"/>
+	</bean>
+
+	<bean id="quotePostCancellationProcessDefinitionResource"
+		  class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/quote/quote-post-cancellation-process.xml"/>
+	</bean>
+
+	<bean id="quoteToExpireSoonProcessDefinitionResource"
+		  class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/quote/quote-to-expire-soon-email-process.xml"/>
+	</bean>
+
+	<bean id="quoteExpiredProcessDefinitionResource"
+		  class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/grabincore/processes/quote/quote-expired-email-process.xml"/>
+	</bean>
+
+	<!-- Quotes email notification jobs -->
+	<bean id="quoteToExpireSoonJobPerformable"
+		  class="com.paulograbin.core.job.QuoteToExpireSoonJobPerformable"
+		  parent="abstractJobPerformable">
+		<property name="supportedQuoteStatuses">
+			<set value-type="de.hybris.platform.core.enums.QuoteState">
+				<value>BUYER_OFFER</value>
+			</set>
+		</property>
+		<property name="commerceQuoteDao" ref="commerceQuoteDao"/>
+		<property name="eventService" ref="eventService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="timeService" ref="timeService" />
+	</bean>
+
+	<bean id="quoteExpiredJobPerformable"
+		  class="com.paulograbin.core.job.QuoteExpiredJobPerformable"
+		  parent="abstractJobPerformable">
+		<property name="supportedQuoteStatuses">
+			<set value-type="de.hybris.platform.core.enums.QuoteState">
+				<value>BUYER_OFFER</value>
+			</set>
+		</property>
+		<property name="commerceQuoteDao" ref="commerceQuoteDao"/>
+		<property name="eventService" ref="eventService" />
+		<property name="timeService" ref="timeService" />
+	</bean>
+
+	<import resource="/grabincore/processes/quote/quote-buyer-process-spring.xml"/>
+	<import resource="/grabincore/processes/quote/quote-salesrep-process-spring.xml"/>
+	<import resource="/grabincore/processes/quote/quote-seller-approval-process-spring.xml"/>
+
+	<import resource="/grabincore/processes/quote/quote-to-expire-soon-email-process-spring.xml"/>
+	<import resource="/grabincore/processes/quote/quote-expired-email-process-spring.xml"/>
+
+	<import resource="/grabincore/processes/quote/quote-post-cancellation-process-spring.xml"/>
+
+	<!-- Customer cleanup -->
+	<alias name="defaultCustomerCleanupRelatedObjectsAction" alias="customerCleanupRelatedObjectsAction"/>
+	<bean id="defaultCustomerCleanupRelatedObjectsAction" class="com.paulograbin.core.retention.impl.DefaultCustomerCleanupRelatedObjectsAction" parent="abstractExtensibleRemoveCleanupAction">
+		<property name="itemCleanupHooks" ref="customerCleanupHooks"/>
+	</bean>
+
+	<!-- Cleanup the customers not owning any order currently and the current date has past deactivation date+retention date. Also removes customers audit records. -->
+	<alias name="defaultCustomerNotOwningOrdersRemoveCleanupAction" alias="customerNotOwningOrdersRemoveCleanupAction"/>
+	<bean id="defaultCustomerNotOwningOrdersRemoveCleanupAction" class="de.hybris.platform.retention.impl.DefaultExtensibleRemoveCleanupAction" parent="abstractExtensibleRemoveCleanupAction">
+		<property name="itemCleanupHooks" ref="customerCleanupHooks"/>
+	</bean>
+
+	<!-- Order cleanup -->
+	<!-- Cleanup the order related objects and then remove order and its audit records. -->
+	<alias name="defaultOrderRemoveCleanupAction" alias="orderRemoveCleanupAction"/>
+	<bean id="defaultOrderRemoveCleanupAction" class="de.hybris.platform.retention.impl.DefaultExtensibleRemoveCleanupAction" parent="abstractExtensibleRemoveCleanupAction">
+		<property name="itemCleanupHooks" ref="orderCleanupHooks"/>
+	</bean>
+
+	<!-- CsTicket Remove action -->
+	<alias name="defaultCSTicketRemoveCleanupAction" alias="csTicketRemoveCleanupAction"/>
+	<bean id="defaultCSTicketRemoveCleanupAction" class="de.hybris.platform.retention.impl.DefaultExtensibleRemoveCleanupAction" parent="abstractExtensibleRemoveCleanupAction">
+		<property name="itemCleanupHooks" ref="csTicketCleanupHooks"/>
+	</bean>
+
+	<!-- CsTicket Stagnation action -->
+	<alias name="defaultCSTicketStagnationAction" alias="csTicketStagnationAction"/>
+	<bean id="defaultCSTicketStagnationAction" class="com.paulograbin.core.retention.impl.DefaultCSTicketStagnationAction" parent="abstractExtensibleRemoveCleanupAction">
+		<property name="itemCleanupHooks" ref="csTicketRetentionHooks"/>
+		<property name="ticketBusinessService" ref="ticketBusinessService"/>
+	</bean>
+</beans>

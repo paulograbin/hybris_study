@@ -1,0 +1,117 @@
+INSERT_UPDATE BaseStore; uid[unique = true]; name[lang = en]          ; currencies(isocode); defaultCurrency(isocode); languages(isocode); defaultLanguage(isocode);
+                       ; basestoreGrabin   ; The base store of Grabin ; USD                ; USD                     ; en                ; en                      ;
+
+$orderProcessCode = order-process
+$pickupInStoreMode = BUY_AND_COLLECT
+$customerAllowedToIgnoreSuggestions = true
+$expressCheckoutEnabled = true
+$paymentProvider = Mockup
+
+
+UPDATE BaseStore; uid[unique = true]; net   ; storelocatorDistanceUnit(code); submitOrderProcessCode; pickupInStoreMode(code); customerAllowedToIgnoreSuggestions  ; paymentProvider
+                ; basestoreGrabin   ; false ; km                            ; $orderProcessCode     ; $pickupInStoreMode     ; $customerAllowedToIgnoreSuggestions ; $paymentProvider ;
+
+
+UPDATE BaseStore; uid[unique = true]; customerAllowedToIgnoreSuggestions; maxRadiusForPoSSearch; checkoutFlowGroup    ; solrFacetSearchConfiguration(name); expressCheckoutEnabled
+                ; basestoreGrabin   ; $expressCheckoutEnabled           ; 300                  ; defaultCheckoutGroup ; electronicsIndex                  ; $expressCheckoutEnabled
+
+
+
+
+
+
+
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+# Import modulegen config properties into impex macros
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$jarResourceCms = $config-jarResourceCmsValue
+
+# Create PageTemplates
+# These define the layout for pages
+# "FrontendTemplateName" is used to define the JSP that should be used to render the page for pages with multiple possible layouts.
+# "RestrictedPageTypes" is used to restrict templates to page types
+INSERT_UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]    ; name                           ; frontendTemplateName           ; restrictedPageTypes(code); active[default = true]
+                          ;                          ; GrabinLandingTemplate ; Grabin Landing Page 2 Template ; layout/landingLayoutGrabin.jsp ;
+
+
+
+
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]             ; name                                 ; active; cmsComponents(&componentRef);
+                         ;                          ; GrabinLandingTemplate-Section1 ; Section1 for Grabin Landing Template ; true  ;                             ;
+                         ;                          ; GrabinLandingTemplate-Section3 ; Section3 for Grabin Landing Template ; true  ;                             ;
+
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]             ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; GrabinLandingTemplate-Section1 ; Section1               ; GrabinLandingTemplate                       ; GrabinLandingTemplate-Section1             ; true
+                                    ;                          ; GrabinLandingTemplate-Section3 ; Section3               ; GrabinLandingTemplate                       ; GrabinLandingTemplate-Section3             ; true
+
+
+
+
+
+# Site-wide Homepage
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name                ; masterTemplate(uid, $contentCV); label               ; defaultPage; approvalStatus(code); homepage
+                         ;                          ; projectPageGrabin ; Project Page Grabin ; GrabinLandingTemplate          ; Project Page Grabin ; false      ; approved            ; false
+
+
+
+
+
+
+
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]      ; name                         ; active; cmsComponents(&componentRef);
+                         ;                          ; ProjectPage-SideContent ; SideContent for Project Page ; true  ;                             ;
+
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]      ; position[unique = true]; page(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true];
+                                ;                          ; ProjectPage-SideContent ; SideContent            ; projectPageGrabin                   ; ProjectPage-SideContent                    ;
+
+
+
+
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$siteResource = jar:com.paulograbin.initialdata.setup.InitialDataSystemSetup&/grabininitialdata/import/contentCatalog
+INSERT_UPDATE Media; $contentCV[unique = true]; code[unique = true]; realfilename ; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/jpeg']; folder(qualifier)[default = 'images']
+                   ;                          ; page.png           ; page.png     ; $siteResource/page.png                                                      ; image/png                   ;
+                   ;                          ; template.png       ; template.png ; $siteResource/template.png                                                  ; image/png                   ;
+
+
+
+
+
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$picture = media(code, $contentCV);
+$lang = en
+
+
+
+INSERT_UPDATE SimpleBannerComponent; $contentCV[unique = true]; uid[unique = true]     ; name                                ; urlLink
+                                   ;                          ; GrabinProjectPageImage ; Grabin Project Page Image Component ; "/"
+                                   ;                          ; GrabinTemplateImage    ; Grabin Template Image Component     ; "/"
+
+UPDATE SimpleBannerComponent; $contentCV[unique = true]; uid[unique = true]     ; $picture[lang = $lang]
+                            ;                          ; GrabinProjectPageImage ; page.png
+                            ;                          ; GrabinTemplateImage    ; template.png
+
+
+
+
+
+
+
+
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+INSERT_UPDATE JspIncludeComponent; $contentCV[unique = true]; uid[unique = true]    ; name                    ; page            ;
+                                 ;                          ; ProjectTableComponent ; Project Table Component ; projectPage.jsp ;

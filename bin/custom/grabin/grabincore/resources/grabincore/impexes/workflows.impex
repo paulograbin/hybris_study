@@ -1,0 +1,104 @@
+INSERT_UPDATE UserGroup; uid[unique = true]; locname[lang = en]    ;
+                       ; approverGroup     ; Grupo dos aprovadores ;
+                       ; creatorGroup      ; Grupo dos criadores   ;
+
+
+$defaultPassword = 123123
+
+# Employees
+INSERT_UPDATE Employee; name              ; password[default = $defaultPassword]; uid[unique = true]       ; groups(uid)[mode = append]; backOfficeLoginDisabled; sessionLanguage(isocode); description
+                      ; Pablo Aprovador   ;                                     ; aprovador1@aprovador.com ; approverGroup             ; false                  ; en                      ; descricao 1
+                      ; Ricardo Aprovador ;                                     ; aprovador2@aprovador.com ; approverGroup             ; false                  ; en                      ; de-de-desc 2
+
+
+
+
+$userName = admin;
+$assignedUserGroupName = approverGroup;
+$emailAddress = PCM-Marketing@arrow.com
+
+# Workflow Template for Survivorship Workflow
+INSERT_UPDATE WorkflowTemplate; code[unique = true]  ; name[lang = en]       ; owner(uid); description[lang = en]; activationscript; visibleForPrincipals(uid); emailAddress
+                              ; SurvivorshipWorkflow ; Survivorship Workflow ; $userName ;                       ;                 ; $userName                ; $emailAddress
+
+# Worflow Action Templates for Survivorship Workflow
+INSERT_UPDATE WorkflowActionTemplate; code[unique = true]; name[lang = en]; description[lang = de]; description[lang = en]; principalAssigned(uid) ; workflow(code)[unique = true]; sendEmail; emailAddress; rendererTemplate(code); actionType(code)
+                                    ; SW_Start           ;                ;                       ;                       ; $assignedUserGroupName ; SurvivorshipWorkflow         ; false    ;             ;                       ; start
+                                    ; SW_End             ; End            ;                       ;                       ; $assignedUserGroupName ; SurvivorshipWorkflow         ; false    ;             ;                       ; end
+
+
+# Automated Workflow Action Templates for Survivorship Workflow
+# The Automated WorkflowAction Templates reference Java classes to perform the automated steps.
+INSERT_UPDATE AutomatedWorkflowActionTemplate; code[unique = true]       ; name[lang = en]          ; description[lang = en]; principalAssigned(uid) ; workflow(code)[unique = true]; sendEmail; emailAddress; rendererTemplate(code); actionType(code); jobHandler
+                                             ; SW_Confirm_Accept_All     ; Accepted all changes     ;                       ; $assignedUserGroupName ; SurvivorshipWorkflow         ; false    ;             ;                       ; normal          ; survivorshipApprovalActionJob
+                                             ; SW_Confirm_Partial_Reject ; Partial rejected changes ;                       ; $assignedUserGroupName ; SurvivorshipWorkflow         ; false    ;             ;                       ; normal          ; survivorshipRejectActionJob
+                                             ; SW_Confirm_Reject_All     ; Rejected all changes     ;                       ; $assignedUserGroupName ; SurvivorshipWorkflow         ; false    ;             ;                       ; normal          ; survivorshipRejectActionJob
+
+# Workflow Decision Templates for Survivorship Workflow
+# These define which decisions or actions are available within our workflow.
+INSERT_UPDATE WorkflowDecisionTemplate; code[unique = true]; name[lang = en]        ; actionTemplate(code)      ; description[allownull = true]; ; ; ; ; ;
+                                      ; SW001              ; Accept all changes     ; SW_Start                  ;                              ; ; ; ; ; ;
+                                      ; SW002              ; Partial Reject changes ; SW_Start                  ;                              ; ; ; ; ; ;
+                                      ; SW003              ; Reject all changes     ; SW_Start                  ;                              ; ; ; ; ; ;
+                                      ; SW004              ; End                    ; SW_Confirm_Accept_All     ;                              ; ; ; ; ; ;
+                                      ; SW005              ; End                    ; SW_Confirm_Partial_Reject ;                              ; ; ; ; ; ;
+                                      ; SW006              ; End                    ; SW_Confirm_Reject_All     ;                              ; ; ; ; ; ;
+
+# Workflow Action Template / Link Template Relations for Survivorship Workflow
+# These define the decisions which can be made from individual workflow points
+INSERT_UPDATE WorkflowActionTemplateLinkTemplateRelation; source(code)[unique = true]; target(code)[unique = true]; andConnectionTemplate; qualifier                                  ; ; ; ; ; ; ;
+                                                        ; SW001                      ; SW_Confirm_Accept_All      ; false                ; WorkflowActionTemplateLinkTemplateRelation ; ; ; ; ; ; ;
+                                                        ; SW002                      ; SW_Confirm_Partial_Reject  ; false                ; WorkflowActionTemplateLinkTemplateRelation ; ; ; ; ; ; ;
+                                                        ; SW003                      ; SW_Confirm_Reject_All      ; false                ; WorkflowActionTemplateLinkTemplateRelation ; ; ; ; ; ; ;
+                                                        ; SW004                      ; SW_End                     ; false                ; WorkflowActionTemplateLinkTemplateRelation ; ; ; ; ; ; ;
+                                                        ; SW005                      ; SW_End                     ; false                ; WorkflowActionTemplateLinkTemplateRelation ; ; ; ; ; ; ;
+                                                        ; SW006                      ; SW_End                     ; false                ; WorkflowActionTemplateLinkTemplateRelation ; ; ; ; ; ; ;
+
+
+
+
+
+
+
+
+
+$START_USERRIGHTS; ; ; ; ; ; ; ; ;
+Type      ; UID           ; MemberOfGroups ; Password ; Target                 ; read ; change ; create ; remove ; change_perm
+UserGroup ; approverGroup ;                ;          ;                        ;      ;        ;        ;        ;
+          ;               ;                ;          ; Media                  ; -    ; -      ; -      ; -      ; -
+          ;               ;                ;          ; MediaFolder            ; -    ; -      ; -      ; -      ; -
+          ;               ;                ;          ; MediaContainer         ; -    ; -      ; -      ; -      ; -
+          ;               ;                ;          ; WorkflowTemplate       ; +    ; -      ; -      ; -      ; - ;
+          ;               ;                ;          ; WorkflowActionTemplate ; +    ; -      ; -      ; -      ; - ;
+          ;               ;                ;          ; WorkflowAction         ; +    ; +      ; -      ; -      ; - ;
+          ;               ;                ;          ; WorkflowDecision       ; +    ; +      ; -      ; -      ; - ;
+          ;               ;                ;          ; Workflow               ; +    ; +      ; -      ; -      ; - ;
+          ;               ;                ;          ; Item.savedValues       ; +    ; -      ; -      ; -      ; - ;
+          ;               ;                ;          ; Item.comments          ; +    ; -      ; -      ; -      ; - ;
+          ;               ;                ;          ; Item                   ; +    ; -      ; -      ; -      ; - ;
+          ;               ;                ;          ; Product                ; +    ; +      ; -      ; -      ; - ;
+$END_USERRIGHTS; ; ; ; ; ; ; ; ;
+
+
+$START_USERRIGHTS; ; ; ; ; ; ; ; ;
+Type      ; UID          ; MemberOfGroups ; Password ; Target                 ; read ; change ; create ; remove ; change_perm
+UserGroup ; creatorGroup ;                ;          ;                        ;      ;        ;        ;        ;
+          ;              ;                ;          ; Media                  ; -    ; -      ; -      ; -      ; -
+          ;              ;                ;          ; MediaFolder            ; -    ; -      ; -      ; -      ; -
+          ;              ;                ;          ; MediaContainer         ; -    ; -      ; -      ; -      ; -
+          ;              ;                ;          ; WorkflowTemplate       ; +    ; -      ; -      ; -      ; - ;
+          ;              ;                ;          ; WorkflowActionTemplate ; +    ; -      ; -      ; -      ; - ;
+          ;              ;                ;          ; WorkflowAction         ; +    ; +      ; -      ; -      ; - ;
+          ;              ;                ;          ; WorkflowDecision       ; +    ; -      ; -      ; -      ; - ;
+          ;              ;                ;          ; Workflow               ; +    ; +      ; -      ; -      ; - ;
+
+$END_USERRIGHTS; ; ; ; ; ; ; ; ;
+
+
+
+
+
+
+
+
+
