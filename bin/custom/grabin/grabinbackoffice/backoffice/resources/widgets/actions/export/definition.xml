@@ -24,7 +24,7 @@
     <inputType>de.hybris.platform.cms2.model.pages.AbstractPageModel</inputType>
 	<outputType>java.lang.String</outputType>
 	
-    <iconUri>icons/icon_confirm_pickup_enabled.png</iconUri>
-    <iconDisabledUri>icons/icon_confirm_pickup_disabled.png</iconDisabledUri>
+    <iconUri>icons/icon_export_enabled.png</iconUri>
+    <iconDisabledUri>icons/icon_export_disabled.png</iconDisabledUri>
 
 </action-definition>
