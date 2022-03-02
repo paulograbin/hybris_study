@@ -15,9 +15,7 @@
 ################################################################################################
 
 log/**
-data/**
 temp/**
-config/**
 bin/
 
 
@@ -49,20 +47,8 @@ bin/
 
 !/hybris/bin/custom/
 !/impex/*
-====================
-#      yRetail     #
-====================
-!/hybris/bin/ext-integration/
-/hybris/bin/ext-integration/*
-!/hybris/bin/ext-integration/sapretail/
-/hybris/bin/ext-integration/sapretail/*
-!/hybris/bin/ext-integration/sapretail/masterdata/
 
-!/hybris/bin/ext-integration/datahub/
-/hybris/bin/ext-integration/datahub/*
-!/hybris/bin/ext-integration/datahub/extensions/
-/hybris/bin/ext-integration/datahub/extensions/*
-!/hybris/bin/ext-integration/datahub/extensions/sapretail/
+
 
 ====================
 #   MySQL_Driver   #
@@ -76,10 +62,7 @@ bin/
 
 !hybris/bin/platform/lib/dbdriver/mysql-connector-java-5.1.36.jar
 
-========================
-#   Data Hub Upgrade   #
-========================
-!/hybris/bin/ext-integration/datahubadapter/
+
 
 =================================================================================
 #   Fix known issue in backoffice see https://jira.hybris.com/browse/ECP-2057   #
@@ -94,10 +77,6 @@ bin/
 ============================
 !/hybris/bin/ext-commerce/assistedservicefacades/resources/assistedservicefacades-spring.xml
 
-========================
-#  Marketing Downport  #
-========================
-!/hybris/bin/ext-integration/ymkt/
 
 ######################
 #     INSTALLER      #
@@ -128,6 +107,7 @@ build-tools/**
 **/gensrc/**
 **/jalo/
 !**/testsrc/**/jalo/
+
 ###############################
 # Filename patterns to ignore #
 ###############################
@@ -151,6 +131,7 @@ build-tools/**
 **/ruleset.xml
 **/*testclasses.xml
 **/bin/**/build.xml
+
 #-------------------#
 # logs & properties #
 #-------------------#
@@ -158,35 +139,15 @@ build-tools/**
 **/base.properties
 **/platformhome.properties
 !**/custom/**/base.properties
+
 #------#
 # Java #
 #------#
 **/Generated*.java
 **/*.class
 **/*hmc.jar
-#-------------#
-# Media Files #
-#-------------#
-**/*.png
-**/*.gif
-**/*.jpg
-**/*.jpeg
-**/*initialdata/resources/allImages/
 
-##### Chedraui Custom #####
-**/*/chedrauiProductCatalog/images/
-!**/*/chedrauiContentCatalog/images/
-!**/custom/**/*.png
-!**/custom/**/*.gif
-!**/custom/**/*.jpg
-!**/custom/**/*.jpeg
 
-# CSS auto generated #
-**/chedrauistorefront/web/webroot/_ui/responsive/**/css
-!**/chedrauistorefront/web/webroot/_ui/responsive/common/redesign/css/
-
-# Generated Javascripts
-**/chedrauistorefront/web/webroot/_ui/responsive/common/js/
 
 ################################
 #  Addon specific copy folders #
@@ -234,9 +195,3 @@ wro_addons.xml
 *.iml
 */hybris4intellij.properties
 **/HawkEye.jar
-
-#----------#
-# Cockpits #
-#----------#
-hybris/bin/custom/chedraui/chedrauiintegrationws/web/webroot/cockpit/*
-hybris/bin/custom/chedrauicommercewebservices/web/webroot/cockpit/*
