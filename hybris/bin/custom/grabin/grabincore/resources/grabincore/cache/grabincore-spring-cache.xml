@@ -1,0 +1,34 @@
+<!--<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--       xmlns:cache="http://www.springframework.org/schema/cache"-->
+<!--       xmlns:context="http://www.springframework.org/schema/context"-->
+<!--       xmlns:utils="http://www.springframework.org/schema/util"-->
+<!--       xsi:schemaLocation="http://www.springframework.org/schema/beans-->
+<!--		http://www.springframework.org/schema/beans/spring-beans.xsd-->
+<!--		http://www.springframework.org/schema/cache-->
+<!--     	http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">-->
+
+<!--    <cache:annotation-driven cache-manager="compositeYourCacheManager" key-generator="commerceCacheKeyGenerator"/>-->
+
+<!--    <alias name="defaultYourCacheManagerList" alias="yourManagerList"/>-->
+<!--    <utils:list id="defaultYourExtensionCacheManagerList">-->
+<!--        <ref bean="defaultYourCacheManager"/>-->
+<!--    </utils:list>-->
+
+<!--    <alias name="defaultCompositeYourCacheManager" alias="compositeYourCacheManager"/>-->
+<!--    <bean id="defaultCompositeWSCacheManager" class="org.springframework.cache.support.CompositeCacheManager">-->
+<!--        <property name="cacheManagers">-->
+<!--            <ref bean="yourCacheManagerList"/>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    <-->
+<!--            alias name="defaultYourCacheManager" alias="yourCacheManager"/>-->
+<!--    <bean id="defaultYourCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">-->
+<!--        <property name="cacheManager" ref="yourEhcache"/>-->
+<!--    </bean>-->
+
+<!--    <alias name="defaultYourEhcache" alias="yourEhcache"/>-->
+<!--    <bean id="defaultYourEhcache"-->
+<!--          class="de.hybris.platform.webservicescommons.cache.TenantAwareEhCacheManagerFactoryBean">-->
+<!--        <property name="configLocation" value="/WEB-INF/cache/yourextension-ehcache.xml"/>-->
+<!--    </bean>-->
+<!--</beans>-->

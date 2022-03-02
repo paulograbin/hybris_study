@@ -1,0 +1,12 @@
+INSERT_UPDATE UserGroup; UID[unique = true]; locname[lang = en] ; name[default = '']; backOfficeLoginDisabled[default = false]
+                       ; syncUserGroup     ; Catalog Sync Users ;                   ;
+
+INSERT_UPDATE BackofficeRole; UID[unique = true]; locName                      ; name                         ; backOfficeLoginDisabled; authorities
+                            ; catalogSyncRole   ; Catalog Synchronization Role ; Catalog Synchronization Role ; FALSE                  ; catalogSyncRole
+
+INSERT_UPDATE PrincipalGroupRelation; source(uid)[unique = true]; target(uid)[unique = true]
+                                    ; syncUserGroup             ; catalogSyncRole ;
+
+INSERT_UPDATE Employee; UID[unique = true]      ; name                        ; groups(uid)   ; description                      ; password; backOfficeLoginDisabled
+                      ; SynchronizerImportToOne ; Syncronization process user ; syncUserGroup ; User for catalog synchronization ; nimda   ; FALSE
+                      ; SynchronizerImportToTwo ; Syncronization process user ; syncUserGroup ; User for catalog synchronization ; nimda   ; FALSE

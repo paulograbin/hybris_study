@@ -1,0 +1,3 @@
+$targetType = Project
+REMOVE Project[batchmode = true]; itemtype(code)[unique = true]
+                                ; $targetType
