@@ -1,23 +1,242 @@
-# Compiled class file
-*.class
+################################################################################################
+# This .gitignore file ignores all hybris-commerce 6.2 default folders based on Best Practices #                                             #                                                                                              #
+# Additionally, it allows shared customisation in the following directores                     #
+#     hybris/bin/custom                                                                        #
+#     hybris/bin/yretail                                                                       #
+#     installer/recipes/<custom-recipe>                                                        #
+#                                                                                              #
+# Add installers outside the custom folder in the following way                                #
+#     !/installer/recipes/<my-custom-recipes>/                                                 #
+#                                                                                              #
+# Configuration for different environments should be included in a build.gradle recipe         #
+#                                                                                              #
+# '!/xx/yy' can be used to  to include sub-folder in the Git repository                        #
+# It is important to avoid ignoring any of the parent folders of a non-ignored sub-folder      #
+################################################################################################
 
-# Log file
-*.log
+log/**
+data/**
+temp/**
+config/**
+bin/
 
-# BlueJ files
-*.ctxt
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+######################
+#       HYBRIS       #
+######################
+/hybris/*
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+====================
+#      Licence     #
+====================
+/hybris/config/*
+!/hybris/config
+!/hybris/config/buildcallbacks.xml
+!/hybris/config/licence/
+!/hybris/config/customize
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+====================
+#   Custom-Ext     #
+====================
+!/hybris/bin
+!/hybris/environments
+/hybris/environments/custom/**
+!/hybris/build.xml
+!/hybris/setantenv.sh
+!/hybris/setantenv.bat
+
+/hybris/bin/*
+
+!/hybris/bin/custom/
+!/impex/*
+====================
+#      yRetail     #
+====================
+!/hybris/bin/ext-integration/
+/hybris/bin/ext-integration/*
+!/hybris/bin/ext-integration/sapretail/
+/hybris/bin/ext-integration/sapretail/*
+!/hybris/bin/ext-integration/sapretail/masterdata/
+
+!/hybris/bin/ext-integration/datahub/
+/hybris/bin/ext-integration/datahub/*
+!/hybris/bin/ext-integration/datahub/extensions/
+/hybris/bin/ext-integration/datahub/extensions/*
+!/hybris/bin/ext-integration/datahub/extensions/sapretail/
+
+====================
+#   MySQL_Driver   #
+====================
+!/hybris/bin/platform/
+/hybris/bin/platform/*
+!hybris/bin/platform/lib/
+/hybris/bin/platform/lib/*
+!/hybris/bin/platform/lib/dbdriver/
+/hybris/bin/platform/lib/dbdriver/*
+
+!hybris/bin/platform/lib/dbdriver/mysql-connector-java-5.1.36.jar
+
+========================
+#   Data Hub Upgrade   #
+========================
+!/hybris/bin/ext-integration/datahubadapter/
+
+=================================================================================
+#   Fix known issue in backoffice see https://jira.hybris.com/browse/ECP-2057   #
+=================================================================================
+!/hybris/bin/ext-backoffice/backoffice/resources/backoffice-widgets.xml
+!/hybris/bin/ext-backoffice/commerceservicesbackoffice/resources/perspective/organization/organization-backoffice-widgets.xml
+!/hybris/bin/ext-backoffice/warehousingbackoffice/resources/warehousingbackoffice-backoffice-widgets.xml
+!/hybris/bin/ext-backoffice/commerceservicesbackoffice/resources/commerceservicesbackoffice-backoffice-widgets.xml
+
+============================
+#   ASM SAP NOTE 2562156   #
+============================
+!/hybris/bin/ext-commerce/assistedservicefacades/resources/assistedservicefacades-spring.xml
+
+========================
+#  Marketing Downport  #
+========================
+!/hybris/bin/ext-integration/ymkt/
+
+######################
+#     INSTALLER      #
+######################
+/installer/*
+!/installer/recipes/
+/installer/recipes/*
+
+!/installer/recipes/chedraui_localhost
+!/installer/recipes/chedraui_dev
+!/installer/recipes/chedraui_hcs_dev
+
+
+#####################
+# Folders to ignore #
+#####################
+build-tools/**
+!build-tools/apache-maven/conf/settings.xml
+
+/c4c-integration/**
+/hybris-ems/**
+/hybris-Mobile-Apps-SDK/**
+/hybris-sbg/**
+/src/**
+/licenses/**
+**/web/testclasses
+**/classes/**
+**/gensrc/**
+**/jalo/
+!**/testsrc/**/jalo/
+###############################
+# Filename patterns to ignore #
+###############################
+#-------------#
+# Hiden files #
+#-------------#
+**/*.bak
+**/*.eml
+**/*.swp
+**/*.project
+#---------#
+# Schemas #
+#---------#
+**/extensioninfo.xsd
+**/hmc.xsd
+**/items.xsd
+**/beans.xsd
+#------#
+# xmls #
+#------#
+**/ruleset.xml
+**/*testclasses.xml
+**/bin/**/build.xml
+#-------------------#
+# logs & properties #
+#-------------------#
+**/*.log
+**/base.properties
+**/platformhome.properties
+!**/custom/**/base.properties
+#------#
+# Java #
+#------#
+**/Generated*.java
+**/*.class
+**/*hmc.jar
+#-------------#
+# Media Files #
+#-------------#
+**/*.png
+**/*.gif
+**/*.jpg
+**/*.jpeg
+**/*initialdata/resources/allImages/
+
+##### Chedraui Custom #####
+**/*/chedrauiProductCatalog/images/
+!**/*/chedrauiContentCatalog/images/
+!**/custom/**/*.png
+!**/custom/**/*.gif
+!**/custom/**/*.jpg
+!**/custom/**/*.jpeg
+
+# CSS auto generated #
+**/chedrauistorefront/web/webroot/_ui/responsive/**/css
+!**/chedrauistorefront/web/webroot/_ui/responsive/common/redesign/css/
+
+# Generated Javascripts
+**/chedrauistorefront/web/webroot/_ui/responsive/common/js/
+
+################################
+#  Addon specific copy folders #
+################################
+**/addonsrc
+**/_ui/addons/
+**/views/addons/
+**/tld/addons/
+**/tags/addons/
+**/messages/addons/
+**/*storefront/web/addonsrc/
+**/*storefront/web/commonwebsrc/
+**/*storefront/web/webroot/*cockpit/
+**/*_bof.jar
+**/node_modules
+**/web/webroot/WEB-INF/lib/addon-*.jar
+**/web/webroot/WEB-INF/_ui-src/addons/
+**/web/webroot/WEB-INF/views/addons/
+wro_addons.xml
+
+######################
+# OS generated files #
+######################
+**/.DS_Store
+**/ehthumbs.db
+**/Thumbs.db
+**/hybris-*.zip
+
+#####################
+# IDE Related files #
+#####################
+#---------#
+# Eclipse #
+#---------#
+.settings/
+.metadata/
+**/eclipsebin/*
+
+#----------#
+# IntelliJ #
+#----------#
+/idea-module-files/**
+.idea
+*.iws
+*.iml
+*/hybris4intellij.properties
+**/HawkEye.jar
+
+#----------#
+# Cockpits #
+#----------#
+hybris/bin/custom/chedraui/chedrauiintegrationws/web/webroot/cockpit/*
+hybris/bin/custom/chedrauicommercewebservices/web/webroot/cockpit/*
