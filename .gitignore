@@ -18,29 +18,36 @@
 ######################
 #       HYBRIS       #
 ######################
+# bin/platform/**
+# bin/ext**
+# config/**
+data/**
+log/**
+temp/**
+
 
 ====================
 #      Licence     #
 ====================
-/hybris/config/*
-!/hybris/config
-!/hybris/config/buildcallbacks.xml
-!/hybris/config/licence/
-!/hybris/config/customize
+config/**
+!config
+!config/buildcallbacks.xml
+!config/licence/
+!config/customize
 
 ====================
 #   Custom-Ext     #
 ====================
-!/hybris/bin
-!/hybris/environments
-/hybris/environments/custom/**
-!/hybris/build.xml
-!/hybris/setantenv.sh
-!/hybris/setantenv.bat
+!bin
+!environments
+/environments/custom/**
+!/build.xml
+!/setantenv.sh
+!/setantenv.bat
 
-/hybris/bin/*
+bin/**
 
-!/hybris/bin/custom/
+!bin/custom/
 !/impex/*
 
 
@@ -73,28 +80,9 @@
 !/hybris/bin/ext-commerce/assistedservicefacades/resources/assistedservicefacades-spring.xml
 
 
-######################
-#     INSTALLER      #
-######################
-/installer/*
-!/installer/recipes/
-/installer/recipes/*
-
-!/installer/recipes/chedraui_localhost
-!/installer/recipes/chedraui_dev
-!/installer/recipes/chedraui_hcs_dev
-
-
 #####################
 # Folders to ignore #
 #####################
-build-tools/**
-!build-tools/apache-maven/conf/settings.xml
-
-/c4c-integration/**
-/hybris-ems/**
-/hybris-Mobile-Apps-SDK/**
-/hybris-sbg/**
 /src/**
 /licenses/**
 **/web/testclasses
