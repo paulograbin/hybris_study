@@ -10,7 +10,7 @@
  license agreement you entered into with SAP.
 --><extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
 
-	<extension abstractclassprefix="Generated" classprefix="GrabinStorefront" name="grabinstorefront" usemaven="false">		
+	<extension abstractclassprefix="Generated" classprefix="GrabinStorefront" name="grabinstorefront" usemaven="true">		
         <requires-extension name="personalizationsearchsamplesaddon"/>
 <requires-extension name="pcmbackofficesamplesaddon"/>
 <requires-extension name="multicountrysampledataaddon"/>
