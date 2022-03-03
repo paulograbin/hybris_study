@@ -9,7 +9,7 @@
  Information and shall use it only in accordance with the terms of the
  license agreement you entered into with SAP.
 -->
-<action-definition id="com.paulograbin.backoffice.actions.ExportAction"
+<action-definition id="com.paulograbin.contentmigrator.actions.ExportAction"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://www.hybris.com/schema/cockpitng/action-definition.xsd">
 	
@@ -18,7 +18,7 @@
 	<author>Paulo Grabin</author>
 	<version>1.0</version>
 	
-	<actionClassName>com.paulograbin.backoffice.actions.ExportAction</actionClassName>
+	<actionClassName>com.paulograbin.contentmigrator.actions.ExportAction</actionClassName>
 
 	
     <inputType>de.hybris.platform.cms2.model.pages.AbstractPageModel</inputType>

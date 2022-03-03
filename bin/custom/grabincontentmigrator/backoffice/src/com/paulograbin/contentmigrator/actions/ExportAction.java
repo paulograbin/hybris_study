@@ -1,10 +1,11 @@
-package com.paulograbin.backoffice.actions;
+package com.paulograbin.contentmigrator.actions;
+
 
 import com.hybris.backoffice.widgets.notificationarea.NotificationService;
 import com.hybris.cockpitng.actions.ActionContext;
 import com.hybris.cockpitng.actions.ActionResult;
 import com.hybris.cockpitng.actions.CockpitAction;
-import com.paulograbin.core.impex.impl.DefaultImpexSpitterFactory;
+import com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory;
 import de.hybris.platform.cms2.model.pages.AbstractPageModel;
 import de.hybris.platform.impex.model.ImpExMediaModel;
 import de.hybris.platform.processengine.BusinessProcessService;
@@ -12,11 +13,10 @@ import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.media.MediaService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import org.apache.log4j.Logger;
-import org.zkoss.zul.Filedownload;
+import org.zkoss.zhtml.Filedownload;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
-
 
 public class ExportAction implements CockpitAction<AbstractPageModel, String> {
 

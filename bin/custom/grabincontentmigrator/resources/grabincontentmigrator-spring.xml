@@ -73,4 +73,15 @@
 
 
 
+
+	<alias name="defaultImpexSpitterFactory" alias="impexSpitterFactory"/>
+	<bean id="defaultImpexSpitterFactory" class="com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory"/>
+
+
+
+	<alias name="defaultImpexHeaderGenerationService" alias="impexHeaderGenerationService"/>
+	<bean id="defaultImpexHeaderGenerationService" class="com.paulograbin.contentmigrator.impex.DefaultImpexHeaderGenerationService"/>
+
+
+
 </beans>

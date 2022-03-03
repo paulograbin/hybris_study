@@ -1,4 +1,4 @@
-package com.paulograbin.core.impex.impl;
+package com.paulograbin.contentmigrator.impex;
 
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.impex.jalo.exp.generator.HeaderLibraryGenerator;

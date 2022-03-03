@@ -1,4 +1,4 @@
-package com.paulograbin.core.impex.impl;
+package com.paulograbin.contentmigrator.impex;
 
 import de.hybris.platform.acceleratorcms.model.components.JspIncludeComponentModel;
 import de.hybris.platform.acceleratorcms.model.components.SimpleBannerComponentModel;
@@ -10,15 +10,12 @@ import de.hybris.platform.cms2.model.pages.PageTemplateModel;
 import de.hybris.platform.cms2.model.relations.ContentSlotForPageModel;
 import de.hybris.platform.cms2.model.relations.ContentSlotForTemplateModel;
 import de.hybris.platform.core.PK;
-import de.hybris.platform.core.model.media.MediaModel;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class ContentPageImpexGenerator extends AbstractImpexGenerator<ContentPageModel> implements ImpexGenerator<ContentPageModel> {

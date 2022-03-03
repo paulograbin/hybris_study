@@ -1,4 +1,4 @@
-package com.paulograbin.core.impex.impl;
+package com.paulograbin.contentmigrator.impex;
 
 import de.hybris.platform.cms2.model.pages.PageTemplateModel;
 import org.apache.log4j.Logger;

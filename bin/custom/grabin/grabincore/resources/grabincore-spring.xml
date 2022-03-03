@@ -84,28 +84,12 @@
 		<property name="testService" ref="testService"/>
 	</bean>
 
-
 	<alias name="defaultGrabinOrderCalculationMethodHook" alias="grabinOrderCalculationMethodHook"/>
 	<bean id="defaultGrabinOrderCalculationMethodHook" class="com.paulograbin.core.order.hook.calculation.GrabinOrderCalculationMethodHook"/>
 
 	<bean id="belcorpOfferDeactivationCalculationMethodHookMergeDirective" depends-on="commerceCartCalculationMethodHooks" parent="listMergeDirective">
 		<property name="add" ref="grabinOrderCalculationMethodHook"/>
 	</bean>
-
-
-
-	<alias name="defaultImpexSpitterFactory" alias="impexSpitterFactory"/>
-	<bean id="defaultImpexSpitterFactory" class="com.paulograbin.core.impex.impl.DefaultImpexSpitterFactory"/>
-
-
-
-	<alias name="defaultImpexHeaderGenerationService" alias="impexHeaderGenerationService"/>
-	<bean id="defaultImpexHeaderGenerationService" class="com.paulograbin.core.impex.impl.DefaultImpexHeaderGenerationService"/>
-
-
-
-
-
 
 
 	<alias name="defaultMostPurchasedProductsService" alias="mostPurchasedProductsService"/>

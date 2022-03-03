@@ -1,6 +1,5 @@
-package com.paulograbin.core.impex.impl;
+package com.paulograbin.contentmigrator.impex;
 
-import com.paulograbin.core.impex.ImpexSpitterFactory;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
 import de.hybris.platform.cms2.model.pages.PageTemplateModel;
 import de.hybris.platform.core.PK;
