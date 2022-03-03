@@ -75,7 +75,7 @@ public class ExportAction implements CockpitAction<AbstractPageModel, String> {
 //            executeMediaDownload(export.getExportedMedia());
 
 //            todo: work on the return type
-            return new ActionResult<String>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{data}));
+            return new ActionResult<>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{data}));
 
         } else {
             return new ActionResult(ActionResult.ERROR);

@@ -78,7 +78,7 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
     public void test() {
         registerGenerators();
 
-        Long itemToExport = 8796158592048l;
+        long itemToExport = 8796158592048L;
         PK pk = PK.fromLong(itemToExport);
 
         ItemModel o = modelService.get(pk);

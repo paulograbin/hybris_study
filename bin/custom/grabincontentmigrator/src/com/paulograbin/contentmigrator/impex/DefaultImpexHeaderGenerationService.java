@@ -20,11 +20,11 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
 
     private static final Logger LOG = Logger.getLogger(DefaultImpexHeaderGenerationService.class);
 
-    private ModelService modelService;
-    private TypeService typeService;
-    private CommonI18NService commonI18NService;
+    private final ModelService modelService;
+    private final TypeService typeService;
+    private final CommonI18NService commonI18NService;
 
-    private String FOOTER = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1} where {pk} in ('%2') \"\" );\"";
+    private final String FOOTER = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1} where {pk} in ('%2') \"\" );\"";
 
     @Autowired
     public DefaultImpexHeaderGenerationService(ModelService modelService, TypeService typeService, CommonI18NService commonI18NService) {
