@@ -64,7 +64,7 @@
     <extension name="grabininitialdata"/>
     <extension name="grabinbackoffice"/>
     <extension name="grabinstorefront"/>
-    <extension name="grabinwebservices"/>
+    <!-- <extension name="grabinwebservices"/> -->
 
     <extension name="grabinimpexloader"/>
 
