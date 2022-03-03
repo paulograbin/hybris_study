@@ -10,18 +10,12 @@
  */
 package com.paulograbin.storefront.controllers.pages;
 
-import com.paulograbin.core.impex.ImpexSpitterFactory;
+import com.paulograbin.contentmigrator.impex.ImpexSpitterFactory;
 import com.paulograbin.facades.tew.ProjectData;
 import com.paulograbin.facades.tew.ProjectFacade;
-import de.hybris.platform.acceleratorcms.model.components.SimpleBannerComponentModel;
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
-import de.hybris.platform.cms2.model.contents.components.AbstractCMSComponentModel;
-import de.hybris.platform.cms2.model.contents.components.SimpleCMSComponentModel;
-import de.hybris.platform.cms2.model.pages.AbstractPageModel;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
-import de.hybris.platform.cms2.model.pages.PageTemplateModel;
-import de.hybris.platform.cms2.model.relations.ContentSlotForTemplateModel;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
