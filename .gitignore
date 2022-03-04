@@ -18,9 +18,10 @@
 ######################
 #       HYBRIS       #
 ######################
-# bin/platform/**
-# bin/ext**
-# config/**
+bin/platform/**
+bin/modules/**
+bin/ext**
+config/**
 data/**
 log/**
 temp/**
@@ -41,11 +42,6 @@ config/**
 !bin
 !environments
 /environments/custom/**
-!/build.xml
-!/setantenv.sh
-!/setantenv.bat
-
-bin/**
 
 !bin/custom/
 !/impex/*

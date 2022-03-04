@@ -59,6 +59,7 @@
 <!--    <extension name='kymaintegrationsampledata' />-->
     <extension name="grabinfulfilmentprocess"/>
     <extension name="grabincore"/>
+    <extension name="grabincontentmigrator"/>
     <extension name="grabinfacades"/>
     <extension name="grabintest"/>
     <extension name="grabininitialdata"/>
