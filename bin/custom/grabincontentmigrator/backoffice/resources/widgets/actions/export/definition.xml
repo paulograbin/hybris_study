@@ -21,7 +21,7 @@
 	<actionClassName>com.paulograbin.contentmigrator.actions.ExportAction</actionClassName>
 
 	
-    <inputType>de.hybris.platform.cms2.model.pages.AbstractPageModel</inputType>
+    <inputType>de.hybris.platform.core.model.ItemModel</inputType>
 	<outputType>java.lang.String</outputType>
 	
     <iconUri>icons/icon_export_enabled.png</iconUri>
