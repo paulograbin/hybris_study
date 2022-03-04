@@ -3,15 +3,17 @@ package com.paulograbin.core.impex.impl;
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.product.ProductModel;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ProductImpexGenerator extends AbstractImpexGenerator<ProductModel> implements ImpexGenerator<ProductModel> {
 
     public ProductImpexGenerator(ImpexHeaderGenerationService impexHeaderGenerationService1) {
         super(impexHeaderGenerationService1);
+    }
+
+    @Override
+    public Map<String, Set<PK>> makePkMap(ProductModel model) {
+        return null;
     }
 
     @Override

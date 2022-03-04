@@ -2,12 +2,10 @@ package com.paulograbin.core.impex.impl;
 
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.ItemModel;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -26,27 +24,29 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
 
     @Override
     public String printImpex(T model) {
-        Set<PK> pksToExport = makePkList(model);
-        String whereClause = makeWhereClause(pksToExport);
-
-        String headerForExporModelHierarchy = generateHeaderForAllTypes(whereClause);
+        String headerForExporModelHierarchy = generateHeaderForAllTypes(model);
         LOG.info(headerForExporModelHierarchy);
 
         return headerForExporModelHierarchy;
     }
 
-    private String generateHeaderForAllTypes(String pksForWhereClause) {
+    private String generateHeaderForAllTypes(T model) {
         List<String> typeList = makeTypeToExportList();
+        Map<String, Set<PK>> stringSetMap = makePkMap(model);
 
         StringBuilder sb = new StringBuilder();
 
         for (String currentType : typeList) {
-            Optional<String> generatedHeaderOptional = impexHeaderGenerationService1.generateHeaderForTypeFromString(currentType);
-            String s = generatedHeaderOptional.orElse("");
+            Set<PK> pksForType = stringSetMap.get(currentType);
+            if(CollectionUtils.isNotEmpty(pksForType)) {
+                Optional<String> generatedHeaderOptional = impexHeaderGenerationService1.generateHeaderForTypeFromString(currentType);
+                String s = generatedHeaderOptional.orElse("");
+                String whereClause = makeWhereClause(pksForType);
 
-            s = s.replace("%2", pksForWhereClause);
+                s = s.replace("%2", whereClause);
 
-            sb.append(s).append(NEW_LINE_CHARACTER);
+                sb.append(s).append(NEW_LINE_CHARACTER);
+            }
         }
 
         return sb.toString();
@@ -58,8 +58,9 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
                 .collect(Collectors.joining("','"));
     }
 
-
     public abstract Set<PK> makePkList(T model);
+
+    public abstract Map<String, Set<PK>> makePkMap(T model);
 
     public List<String> makeTypeToExportList() {
         return Collections.emptyList();

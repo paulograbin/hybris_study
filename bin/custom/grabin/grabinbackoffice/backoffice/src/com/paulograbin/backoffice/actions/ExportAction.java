@@ -5,7 +5,7 @@ import com.hybris.cockpitng.actions.ActionContext;
 import com.hybris.cockpitng.actions.ActionResult;
 import com.hybris.cockpitng.actions.CockpitAction;
 import com.paulograbin.core.impex.impl.DefaultImpexSpitterFactory;
-import de.hybris.platform.cms2.model.pages.AbstractPageModel;
+import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.impex.model.ImpExMediaModel;
 import de.hybris.platform.processengine.BusinessProcessService;
 import de.hybris.platform.servicelayer.impex.ExportResult;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import java.io.InputStream;
 
 
-public class ExportAction implements CockpitAction<AbstractPageModel, String> {
+public class ExportAction implements CockpitAction<ItemModel, String> {
 
     private static final Logger LOG = Logger.getLogger(ExportAction.class);
 
@@ -44,35 +44,25 @@ public class ExportAction implements CockpitAction<AbstractPageModel, String> {
 
 
     @Override
-    public boolean canPerform(final ActionContext<AbstractPageModel> ctx) {
+    public boolean canPerform(final ActionContext<ItemModel> ctx) {
         LOG.info("Can Perform...");
 
         return true;
     }
 
     @Override
-    public ActionResult<String> perform(final ActionContext<AbstractPageModel> ctx) {
-        final Object data = ctx.getData();
+    public ActionResult<String> perform(final ActionContext<ItemModel> ctx) {
+        final ItemModel data = ctx.getData();
+        if (data != null) {
 
-        if ((data != null) && (data instanceof AbstractPageModel)) {
+            ExportResult export = impexSpitterFactory.export(data);
 
-            AbstractPageModel abstractPageModel = (AbstractPageModel) data;
-
-            ExportResult export = impexSpitterFactory.export(abstractPageModel);
-
-            ActionResult<Object> objectActionResult = new ActionResult<>(ActionResult.SUCCESS, abstractPageModel);
+            ActionResult<Object> objectActionResult = new ActionResult<>(ActionResult.SUCCESS, data);
             objectActionResult.setData("testeeee");
             objectActionResult.setResultCode("success");
             objectActionResult.setData(export.getExportedData().getDownloadURL());
 
-//            StringBuilder sb = new StringBuilder();
-//            sb.append("Successfull: ").append(export.isSuccessful()).append("\n");
-//            sb.append("Exported data: ").append(export.getExportedData().getDownloadURL()).append("\n");
-//            sb.append("Exported media: ").append(export.getExportedMedia()).append("\n");
-//
-//            Messagebox.show(sb.toString());
             executeMediaDownload(export.getExportedData());
-//            executeMediaDownload(export.getExportedMedia());
 
 //            todo: work on the return type
             return new ActionResult<String>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{data}));
@@ -94,12 +84,12 @@ public class ExportAction implements CockpitAction<AbstractPageModel, String> {
     }
 
     @Override
-    public boolean needsConfirmation(ActionContext<AbstractPageModel> ctx) {
+    public boolean needsConfirmation(ActionContext<ItemModel> ctx) {
         return false;
     }
 
     @Override
-    public String getConfirmationMessage(ActionContext<AbstractPageModel> ctx) {
+    public String getConfirmationMessage(ActionContext<ItemModel> ctx) {
         LOG.info("getConfirmationMessage...");
 
         return ctx.getLabel(CONFIRMATION_MESSAGE);

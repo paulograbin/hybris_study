@@ -10,15 +10,9 @@ import de.hybris.platform.cms2.model.pages.PageTemplateModel;
 import de.hybris.platform.cms2.model.relations.ContentSlotForPageModel;
 import de.hybris.platform.cms2.model.relations.ContentSlotForTemplateModel;
 import de.hybris.platform.core.PK;
-import de.hybris.platform.core.model.media.MediaModel;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 
 public class ContentPageImpexGenerator extends AbstractImpexGenerator<ContentPageModel> implements ImpexGenerator<ContentPageModel> {
@@ -27,6 +21,11 @@ public class ContentPageImpexGenerator extends AbstractImpexGenerator<ContentPag
 
     public ContentPageImpexGenerator(ImpexHeaderGenerationService impexHeaderGenerationService) {
         super(impexHeaderGenerationService);
+    }
+
+    @Override
+    public Map<String, Set<PK>> makePkMap(ContentPageModel model) {
+        return null;
     }
 
 
@@ -93,4 +92,6 @@ public class ContentPageImpexGenerator extends AbstractImpexGenerator<ContentPag
         LOG.info("Found " + pks.size() + " to export");
         return pks;
     }
+
+
 }

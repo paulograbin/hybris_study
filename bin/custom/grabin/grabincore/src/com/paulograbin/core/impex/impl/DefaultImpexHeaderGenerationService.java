@@ -1,5 +1,6 @@
 package com.paulograbin.core.impex.impl;
 
+import com.impexloader.paulograbin.service.ItemTypeImpexHeaderService;
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.impex.jalo.exp.generator.HeaderLibraryGenerator;
 import de.hybris.platform.jalo.c2l.Language;
@@ -7,9 +8,11 @@ import de.hybris.platform.jalo.type.ComposedType;
 import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.type.TypeService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,9 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     private TypeService typeService;
     private CommonI18NService commonI18NService;
 
+    @Resource
+    private ItemTypeImpexHeaderService itemTypeImpexHeaderService;
+
     private String FOOTER = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1} where {pk} in ('%2') \"\" );\"";
 
     @Autowired
@@ -35,6 +41,13 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
 
     @Override
     public Optional<String> generateHeaderForType(ItemModel model) {
+
+        String headerForItemType = itemTypeImpexHeaderService.findHeaderForItemType(model.getItemtype());
+        if(StringUtils.isNotBlank(headerForItemType))
+        {
+            return Optional.of(appendWhereClause(headerForItemType + "\n", model.getItemtype()));
+        }
+
         HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
         Set<Language> langs = new HashSet<>();
         langs.add(modelService.getSource(commonI18NService.getLanguage("en")));
@@ -59,6 +72,13 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
 
     @Override
     public Optional<String> generateHeaderForTypeFromString(String model) {
+
+        String headerForItemType = itemTypeImpexHeaderService.findHeaderForItemType(model);
+        if(StringUtils.isNotBlank(headerForItemType))
+        {
+            return Optional.of(appendWhereClause(headerForItemType + "\n", model));
+        }
+
         HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
         Set<Language> langs = new HashSet<>();
         langs.add(modelService.getSource(commonI18NService.getLanguage("en")));

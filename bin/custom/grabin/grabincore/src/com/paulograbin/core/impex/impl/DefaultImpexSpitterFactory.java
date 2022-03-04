@@ -1,6 +1,7 @@
 package com.paulograbin.core.impex.impl;
 
 import com.paulograbin.core.impex.ImpexSpitterFactory;
+import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
 import de.hybris.platform.cms2.model.pages.PageTemplateModel;
 import de.hybris.platform.core.PK;
@@ -58,6 +59,7 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
     private void registerGenerators() {
         map.put(ContentPageModel._TYPECODE, new ContentPageImpexGenerator(impexHeaderGenerationService));
         map.put(PageTemplateModel._TYPECODE, new PageTemplateGenerator(impexHeaderGenerationService));
+        map.put(CategoryModel._TYPECODE, new CategoryImpexGenerator(impexHeaderGenerationService));
         map.put(ProductModel._TYPECODE, new ProductImpexGenerator(impexHeaderGenerationService));
     }
 
@@ -66,8 +68,10 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         registerGenerators();
 
         ImpexGenerator impexGenerator = map.get(itemModel.getItemtype());
+        if (impexGenerator == null) {
+            throw new IllegalStateException("No instance of ImpexGenerator configured for item type " + itemModel.getItemtype());
+        }
         String s = impexGenerator.printImpex(itemModel);
-
 
         ExportResult exportResult = runExport(s);
         printExportResult(exportResult);

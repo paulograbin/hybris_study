@@ -56,5 +56,27 @@
             </attributes>
         </itemtype>
 
+
+        <itemtype code="ItemTypeImpexHeader">
+            <description>Change set</description>
+            <deployment table="ItemTypeImpexHeader" typecode="24341"/>
+            <attributes>
+                <attribute qualifier="typeCodeReference" type="java.lang.String">
+                    <description>TYPECODE for the item type</description>
+                    <modifiers unique="true" read="true" write="true" search="true" initial="false" />
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="header" type="java.lang.String">
+                    <persistence type="property">
+                        <columntype>
+                            <value>HYBRIS.LONG_STRING</value>
+                        </columntype>
+                    </persistence>
+                    <modifiers read="true" write="true" search="true" initial="false" />
+                    <description>The custom impex header to be used</description>
+                </attribute>
+            </attributes>
+        </itemtype>
+
     </itemtypes>
 </items>

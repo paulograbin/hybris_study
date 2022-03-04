@@ -102,4 +102,7 @@
         <property name="flexibleSearchService" ref="flexibleSearchService"/>
     </bean>
 
+    <alias name="defaultItemTypeImpexHeaderService" alias="itemTypeImpexHeaderService" />
+    <bean id="defaultItemTypeImpexHeaderService" class="com.impexloader.paulograbin.service.impl.DefaultItemTypeImpexHeaderService" />
+
 </beans>
