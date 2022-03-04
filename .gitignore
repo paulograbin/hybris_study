@@ -147,6 +147,8 @@ config/**
 **/web/webroot/WEB-INF/views/addons/
 wro_addons.xml
 
+bin/custom/yb2bacceleratorstorefront/**
+
 ######################
 # OS generated files #
 ######################
