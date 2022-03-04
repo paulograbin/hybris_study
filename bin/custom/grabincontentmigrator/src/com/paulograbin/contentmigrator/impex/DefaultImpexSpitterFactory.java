@@ -1,6 +1,5 @@
 package com.paulograbin.contentmigrator.impex;
 
-import com.paulograbin.core.impex.ImpexSpitterFactory;
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
 import de.hybris.platform.cms2.model.pages.PageTemplateModel;

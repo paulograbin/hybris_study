@@ -6,8 +6,6 @@ import com.hybris.cockpitng.actions.ActionContext;
 import com.hybris.cockpitng.actions.ActionResult;
 import com.hybris.cockpitng.actions.CockpitAction;
 import com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory;
-import de.hybris.platform.cms2.model.pages.AbstractPageModel;
-import com.paulograbin.core.impex.impl.DefaultImpexSpitterFactory;
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.impex.model.ImpExMediaModel;
 import de.hybris.platform.processengine.BusinessProcessService;

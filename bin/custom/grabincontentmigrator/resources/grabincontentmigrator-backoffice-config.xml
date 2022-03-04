@@ -20,4 +20,13 @@
 		</y:actions>
 	</context>
 
+	<context merge-by="module" component="editorareaactions" type="Category">
+		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
+			<y:group qualifier="common">
+				<y:label>actiongroup.common</y:label>
+				<y:action action-id="com.paulograbin.contentmigrator.actions.ExportAction" property="currentObject"/>
+			</y:group>
+		</y:actions>
+	</context>
+
 </config>

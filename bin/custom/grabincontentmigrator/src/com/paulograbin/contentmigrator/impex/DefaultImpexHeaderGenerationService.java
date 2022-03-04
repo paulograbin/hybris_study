@@ -1,6 +1,6 @@
 package com.paulograbin.contentmigrator.impex;
 
-import com.impexloader.paulograbin.service.ItemTypeImpexHeaderService;
+import com.paulograbin.contentmigrator.service.ItemTypeImpexHeaderService;
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.impex.jalo.exp.generator.HeaderLibraryGenerator;
 import de.hybris.platform.jalo.c2l.Language;
