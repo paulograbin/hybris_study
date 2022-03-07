@@ -12,6 +12,32 @@
 
 <!--	todo: add button to all types instead of declaring each individually  -->
 
+
+
+	<context component="explorer-tree" merge-by="module" parent="auto" principal="admin,admingroup">
+		<n:explorer-tree xmlns:n="http://www.hybris.com/cockpitng/config/explorertree">
+			<n:navigation-node id="treenode_exporter" position="0">
+				<n:type-node id="typenode_ItemTypeImpexHeader" code="ItemTypeImpexHeader"/>
+			</n:navigation-node>
+		</n:explorer-tree>
+	</context>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<context merge-by="module" component="editorareaactions" type="AbstractPage">
 		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
 			<y:group qualifier="common">
