@@ -1,20 +1,18 @@
 package com.paulograbin.contentmigrator.actions;
 
-
 import com.hybris.backoffice.widgets.notificationarea.NotificationService;
 import com.hybris.cockpitng.actions.ActionContext;
 import com.hybris.cockpitng.actions.ActionResult;
 import com.hybris.cockpitng.actions.CockpitAction;
 import com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory;
-import de.hybris.platform.impex.model.ImpExMediaModel;
+import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.processengine.BusinessProcessService;
+import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.media.MediaService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import org.apache.log4j.Logger;
-import org.zkoss.zhtml.Filedownload;
 
 import javax.annotation.Resource;
-import java.io.InputStream;
 import java.util.LinkedHashSet;
 
 
@@ -51,32 +49,36 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet, String
 
     @Override
     public ActionResult<String> perform(final ActionContext<LinkedHashSet> ctx) {
-        ActionContext<LinkedHashSet> ctx1 = ctx;
-//        final ItemModel data = ctx1.getData();
-        if (ctx1 != null) {
+        if (ctx != null) {
 
-//            ExportResult export = impexSpitterFactory.export(data);
+            LinkedHashSet dataToExport = ctx.getData();
+            LOG.info("Data to export " + dataToExport.size());
+
+            if (dataToExport.isEmpty()) {
+//                Export every model instance
+
+            } else {
+                if (dataToExport.size() == 1) {
+                    LOG.info("Exporting single model...");
+                    ExportResult export = impexSpitterFactory.export((ItemModel) dataToExport.iterator().next());
+
+                    FileDownloadHelper.executeMediaDownload(mediaService, export.getExportedData());
+                } else {
+
+                }
+            }
+
+//            ExportResult export = impexSpitterFactory.export(dataToExport);
 
 //            executeMediaDownload(export.getExportedData());
 
 //            todo: work on the return type
-//            return new ActionResult<>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{data}));
+//            return new ActionResult<>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{dataToExport}));
             return new ActionResult<>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{}));
 
         } else {
             return new ActionResult(ActionResult.ERROR);
         }
-    }
-
-    protected void executeMediaDownload(ImpExMediaModel media) {
-        InputStream mediaStream = this.mediaService.getStreamFromMedia(media);
-        String mime = media.getMime();
-        String fileName = media.getCode();
-        this.executeBrowserMediaDownload(mediaStream, mime, fileName);
-    }
-
-    protected void executeBrowserMediaDownload(InputStream mediaStream, String mime, String fileName) {
-        Filedownload.save(mediaStream, mime, fileName);
     }
 
     @Override

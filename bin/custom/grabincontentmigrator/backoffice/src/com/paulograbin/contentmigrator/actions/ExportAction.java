@@ -7,16 +7,13 @@ import com.hybris.cockpitng.actions.ActionResult;
 import com.hybris.cockpitng.actions.CockpitAction;
 import com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory;
 import de.hybris.platform.core.model.ItemModel;
-import de.hybris.platform.impex.model.ImpExMediaModel;
 import de.hybris.platform.processengine.BusinessProcessService;
 import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.media.MediaService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import org.apache.log4j.Logger;
-import org.zkoss.zhtml.Filedownload;
 
 import javax.annotation.Resource;
-import java.io.InputStream;
 
 
 public class ExportAction implements CockpitAction<ItemModel, String> {
@@ -62,7 +59,7 @@ public class ExportAction implements CockpitAction<ItemModel, String> {
             objectActionResult.setResultCode("success");
             objectActionResult.setData(export.getExportedData().getDownloadURL());
 
-            executeMediaDownload(export.getExportedData());
+            FileDownloadHelper.executeMediaDownload(this.mediaService, export.getExportedData());
 
 //            todo: work on the return type
             return new ActionResult<>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{data}));
@@ -72,16 +69,6 @@ public class ExportAction implements CockpitAction<ItemModel, String> {
         }
     }
 
-    protected void executeMediaDownload(ImpExMediaModel media) {
-        InputStream mediaStream = this.mediaService.getStreamFromMedia(media);
-        String mime = media.getMime();
-        String fileName = media.getCode();
-        this.executeBrowserMediaDownload(mediaStream, mime, fileName);
-    }
-
-    protected void executeBrowserMediaDownload(InputStream mediaStream, String mime, String fileName) {
-        Filedownload.save(mediaStream, mime, fileName);
-    }
 
     @Override
     public boolean needsConfirmation(ActionContext<ItemModel> ctx) {
