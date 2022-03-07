@@ -14,5 +14,4 @@ public interface ImpexHeaderGenerationService {
 
     Optional<String> generateHeaderForTypes(List<String> itemModelList);
 
-    String processHeaderGenerated(String s);
 }

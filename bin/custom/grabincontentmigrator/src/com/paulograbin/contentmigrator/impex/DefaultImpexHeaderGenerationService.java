@@ -138,8 +138,7 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
                 .concat("\n");
     }
 
-    @Override
-    public String processHeaderGenerated(String s) {
+    private String processHeaderGenerated(String s) {
         final String stepOne = removeFlowerBox(s);
         final String a = appendImpexModifierToLineBeginning(stepOne);
 
