@@ -82,9 +82,7 @@
 	<alias name="defaultImpexHeaderGenerationService" alias="impexHeaderGenerationService"/>
 	<bean id="defaultImpexHeaderGenerationService" class="com.paulograbin.contentmigrator.impex.DefaultImpexHeaderGenerationService"/>
 
-	<alias name="defaultItemTypeImpexHeaderService" alias="itemTypeImpexHeaderService" />
-	<bean id="defaultItemTypeImpexHeaderService" class="com.paulograbin.contentmigrator.service.impl.DefaultItemTypeImpexHeaderService" />
-
-
+	<alias name="defaultHardCodedHeaderService" alias="hardCodedHeaderService" />
+	<bean id="defaultHardCodedHeaderService" class="com.paulograbin.contentmigrator.service.impl.DefaultHardCodedHeaderService" />
 
 </beans>

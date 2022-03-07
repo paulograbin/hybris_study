@@ -28,7 +28,7 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     private final CommonI18NService commonI18NService;
 
     @Resource
-    private ItemTypeImpexHeaderService itemTypeImpexHeaderService;
+    private HardCodedHeaderService hardCodedHeaderService;
 
     private final String FOOTER = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1} where {pk} in ('%2') \"\" );\"";
 
@@ -42,7 +42,7 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     @Override
     public Optional<String> generateHeaderForType(ItemModel model) {
 
-        String headerForItemType = itemTypeImpexHeaderService.findHeaderForItemType(model.getItemtype());
+        String headerForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(model.getItemtype());
         if(StringUtils.isNotBlank(headerForItemType))
         {
             return Optional.of(appendWhereClause(headerForItemType + "\n", model.getItemtype()));
@@ -73,10 +73,11 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     @Override
     public Optional<String> generateHeaderForTypeFromString(String model) {
 
-        String headerForItemType = itemTypeImpexHeaderService.findHeaderForItemType(model);
-        if(StringUtils.isNotBlank(headerForItemType))
+        String hardCodedHeaderForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(typeName);
+        if(StringUtils.isNotBlank(hardCodedHeaderForItemType))
         {
-            return Optional.of(appendWhereClause(headerForItemType + "\n", model));
+            LOG.info("Found hardcoded header for type " + typeName);
+            return Optional.of(appendWhereClause(hardCodedHeaderForItemType + "\n", typeName));
         }
 
         HeaderLibraryGenerator generator = new HeaderLibraryGenerator();

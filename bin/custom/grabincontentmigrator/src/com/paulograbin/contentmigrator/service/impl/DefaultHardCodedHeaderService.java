@@ -1,20 +1,21 @@
 package com.paulograbin.contentmigrator.service.impl;
 
-import com.impexloader.paulograbin.model.ItemTypeImpexHeaderModel;
-import com.paulograbin.contentmigrator.service.ItemTypeImpexHeaderService;
+import com.paulograbin.contentmigrator.model.ItemTypeImpexHeaderModel;
+import com.paulograbin.contentmigrator.service.HardCodedHeaderService;
 import de.hybris.platform.servicelayer.exceptions.ModelNotFoundException;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.Resource;
 
-public class DefaultItemTypeImpexHeaderService implements ItemTypeImpexHeaderService {
+
+public class DefaultHardCodedHeaderService implements HardCodedHeaderService {
 
     @Resource
     private FlexibleSearchService flexibleSearchService;
 
     @Override
-    public String findHeaderForItemType(String typecode) {
+    public String findHardCodedHeaderForItemType(String typecode) {
         final ItemTypeImpexHeaderModel itemTypeImpexHeaderModel = new ItemTypeImpexHeaderModel();
         itemTypeImpexHeaderModel.setTypeCodeReference(typecode);
 
