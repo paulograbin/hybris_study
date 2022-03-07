@@ -3,9 +3,16 @@ package com.paulograbin.contentmigrator.impex;
 import de.hybris.platform.catalog.model.ProductReferenceModel;
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.product.ProductModel;
+import de.hybris.platform.servicelayer.model.AbstractItemModel;
 import de.hybris.platform.variants.model.VariantProductModel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProductImpexGenerator extends AbstractImpexGenerator<ProductModel> implements ImpexGenerator<ProductModel> {
 
@@ -21,16 +28,16 @@ public class ProductImpexGenerator extends AbstractImpexGenerator<ProductModel> 
         productPks.add(model.getPk());
         itemTypeToPksMap.put(ProductModel._TYPECODE, productPks);
 
-        Set<PK> variantPks = new HashSet<>();
-        for(VariantProductModel variantProductModel: model.getVariants()) {
-            variantPks.add(variantProductModel.getPk());
-        }
+        Set<PK> variantPks = model.getVariants()
+                .stream()
+                .map(AbstractItemModel::getPk)
+                .collect(Collectors.toSet());
         itemTypeToPksMap.put(VariantProductModel._TYPECODE, variantPks);
 
-        Set<PK> referencesPks = new HashSet<>();
-        for(ProductReferenceModel reference: model.getProductReferences()) {
-            referencesPks.add(reference.getPk());
-        }
+        Set<PK> referencesPks = model.getProductReferences()
+                .stream()
+                .map(AbstractItemModel::getPk)
+                .collect(Collectors.toSet());
         itemTypeToPksMap.put(ProductReferenceModel._TYPECODE, referencesPks);
 
         return itemTypeToPksMap;
