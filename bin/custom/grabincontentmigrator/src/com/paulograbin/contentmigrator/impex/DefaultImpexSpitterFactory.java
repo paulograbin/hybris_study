@@ -2,17 +2,14 @@ package com.paulograbin.contentmigrator.impex;
 
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
-import de.hybris.platform.cms2.model.pages.PageTemplateModel;
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.hac.data.form.ImpexContentFormData;
 import de.hybris.platform.impex.enums.ImpExValidationModeEnum;
 import de.hybris.platform.impex.model.ImpExMediaModel;
-import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.impex.ExportConfig;
 import de.hybris.platform.servicelayer.impex.ExportResult;
-import de.hybris.platform.servicelayer.impex.ExportScriptGenerationService;
 import de.hybris.platform.servicelayer.impex.ExportService;
 import de.hybris.platform.servicelayer.impex.ImpExValidationResult;
 import de.hybris.platform.servicelayer.impex.impl.StreamBasedImpExResource;
@@ -40,24 +37,16 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
     @Resource
     private ImpexHeaderGenerationService impexHeaderGenerationService;
 
-    @Resource
-    private ExportScriptGenerationService scriptGenerationService;
-
-    @Resource
-    private CommonI18NService commonI18NService;
-
 
     private final Map<String, ImpexGenerator> map;
 
     public DefaultImpexSpitterFactory() {
         map = new HashMap<>(10);
-
 //        registerGenerators();
     }
 
     private void registerGenerators() {
         map.put(ContentPageModel._TYPECODE, new ContentPageImpexGenerator(impexHeaderGenerationService));
-        map.put(PageTemplateModel._TYPECODE, new PageTemplateGenerator(impexHeaderGenerationService));
         map.put(CategoryModel._TYPECODE, new CategoryImpexGenerator(impexHeaderGenerationService));
         map.put(ProductModel._TYPECODE, new ProductImpexGenerator(impexHeaderGenerationService));
     }
@@ -92,7 +81,6 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
 //        String s = s1.get();
 //        LOG.info("Header geerated " + s);
 //        Optional<String> s2 = generateHeaderForType(abstractItemModel);
-
 
         ImpexGenerator<ContentPageModel> impexGenerator = map.get(o.getItemtype());
         String s = impexGenerator.printImpex((ContentPageModel) o);
