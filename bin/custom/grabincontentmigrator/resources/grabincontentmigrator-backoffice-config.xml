@@ -10,9 +10,6 @@
 		<!--Please check documentation for code snippets for specific components-->
 	<!--</context>-->
 
-<!--	todo: add button to all types instead of declaring each individually  -->
-
-
 
 	<context component="explorer-tree" merge-by="module" parent="auto" principal="admin,admingroup">
 		<n:explorer-tree xmlns:n="http://www.hybris.com/cockpitng/config/explorertree">
@@ -24,32 +21,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	<context merge-by="module" component="editorareaactions" type="AbstractPage">
-		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
-			<y:group qualifier="common">
-				<y:label>actiongroup.common</y:label>
-				<y:action action-id="com.paulograbin.contentmigrator.actions.ExportAction" property="currentObject"/>
-			</y:group>
-		</y:actions>
-	</context>
-
-
-
-
 	<context type="Item" component="listviewactions" module="platformbackoffice" merge-by="module">
 		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris" xmlns:as="http://www.hybris.com/cockpitng/config/advancedsearch" xmlns:cb="http://www.hybris.com/cockpitng/config/collectionbrowser" xmlns:cv="http://www.hybris.com/cockpitng/component/compareview" xmlns:df="http://www.hybris.com/cockpitng/component/dynamicForms" xmlns:dsb="http://www.hybris.com/cockpitng/config/dashboard" xmlns:ea="http://www.hybris.com/cockpitng/component/editorArea" xmlns:et="http://www.hybris.com/cockpitng/config/explorertree" xmlns:gv="http://www.hybris.com/cockpitng/component/gridView" xmlns:lv="http://www.hybris.com/cockpitng/component/listView" xmlns:na="http://www.hybris.com/cockpitng/config/notifications" xmlns:ss="http://www.hybris.com/cockpitng/config/simplesearch" xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" xmlns:yc="http://www.hybris.com/cockpitng/config/common">
 			<y:group position="30" qualifier="test" show-group-header="false">
@@ -58,24 +29,5 @@
 		</y:actions>
 	</context>
 
-
-
-	<context merge-by="module" component="editorareaactions" type="Category">
-		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
-			<y:group qualifier="common">
-				<y:label>actiongroup.common</y:label>
-				<y:action action-id="com.paulograbin.contentmigrator.actions.ExportAction" property="currentObject"/>
-			</y:group>
-		</y:actions>
-	</context>
-
-	<context merge-by="module" component="editorareaactions" type="Product">
-		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
-			<y:group qualifier="common">
-				<y:label>actiongroup.common</y:label>
-				<y:action action-id="com.paulograbin.contentmigrator.actions.ExportAction" property="currentObject"/>
-			</y:group>
-		</y:actions>
-	</context>
 
 </config>
