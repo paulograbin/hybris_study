@@ -55,7 +55,7 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet, String
             LOG.info("Data to export " + dataToExport.size());
 
             if (dataToExport.isEmpty()) {
-//                Export every model instance
+//                Show message asking user to select items
 
             } else {
                 if (dataToExport.size() == 1) {
