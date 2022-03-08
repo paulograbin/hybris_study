@@ -1,6 +1,6 @@
 package com.paulograbin.contentmigrator.impex;
 
-import com.paulograbin.contentmigrator.service.ItemTypeImpexHeaderService;
+import com.paulograbin.contentmigrator.service.HardCodedHeaderService;
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.impex.jalo.exp.generator.HeaderLibraryGenerator;
 import de.hybris.platform.jalo.c2l.Language;
@@ -71,7 +71,7 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     }
 
     @Override
-    public Optional<String> generateHeaderForTypeFromString(String model) {
+    public Optional<String> generateHeaderForTypeFromString(String typeName) {
 
         String hardCodedHeaderForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(typeName);
         if(StringUtils.isNotBlank(hardCodedHeaderForItemType))
@@ -85,14 +85,14 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
         langs.add(modelService.getSource(commonI18NService.getLanguage("en")));
 
         Set<ComposedType> composedTypes = new HashSet<>();
-        composedTypes.add(modelService.getSource(typeService.getComposedTypeForCode(model)));
+        composedTypes.add(modelService.getSource(typeService.getComposedTypeForCode(typeName)));
 
         generator.setLanguages(langs);
         generator.setTypes(composedTypes);
         try {
             String s = generator.generateScript();
             String processedHeader = processHeaderGenerated(s);
-            String finalHeader = appendWhereClause(processedHeader, model);
+            String finalHeader = appendWhereClause(processedHeader, typeName);
 
             return Optional.of(finalHeader);
         } catch (RuntimeException e) {
