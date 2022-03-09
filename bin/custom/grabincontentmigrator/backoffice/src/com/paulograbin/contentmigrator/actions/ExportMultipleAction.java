@@ -58,19 +58,19 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet, String
             if (dataToExport.isEmpty()) {
                 Messagebox.show("To use the export feature you must select at least one in the list below", "title", null, org.zkoss.zul.Messagebox.EXCLAMATION, null);
             } else {
+                ExportResult result = null;
+
                 if (dataToExport.size() == 1) {
                     LOG.info("Exporting single model...");
-                    ExportResult export = impexSpitterFactory.export((ItemModel) dataToExport.iterator().next());
+                    result = impexSpitterFactory.export((ItemModel) dataToExport.iterator().next());
 
-                    FileDownloadHelper.executeMediaDownload(mediaService, export.getExportedData());
                 } else {
-
+                    LOG.info("Exporting several models...");
+                    result = impexSpitterFactory.exportMultiple(dataToExport);
                 }
+
+                FileDownloadHelper.executeMediaDownload(mediaService, result.getExportedData());
             }
-
-//            ExportResult export = impexSpitterFactory.export(dataToExport);
-
-//            executeMediaDownload(export.getExportedData());
 
 //            todo: work on the return type
 //            return new ActionResult<>(ActionResult.SUCCESS, ctx.getLabel("message", new Object[]{dataToExport}));

@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
@@ -59,6 +60,27 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         if (impexGenerator == null) {
             throw new IllegalStateException("No instance of ImpexGenerator configured for item type " + itemModel.getItemtype());
         }
+        String s = impexGenerator.printImpex(itemModel);
+
+        ExportResult exportResult = runExport(s);
+        printExportResult(exportResult);
+
+        return exportResult;
+    }
+
+    @Override
+    public ExportResult exportMultiple(Set<ItemModel> itemModel) {
+        registerGenerators();
+
+//        Check if models from multiple types were selected because in such case next line may not be enough
+
+        ItemModel firstElement = itemModel.iterator().next();
+
+        ImpexGenerator impexGenerator = map.get(firstElement.getItemtype());
+        if (impexGenerator == null) {
+            throw new IllegalStateException("No instance of ImpexGenerator configured for item type " + firstElement.getItemtype());
+        }
+
         String s = impexGenerator.printImpex(itemModel);
 
         ExportResult exportResult = runExport(s);
