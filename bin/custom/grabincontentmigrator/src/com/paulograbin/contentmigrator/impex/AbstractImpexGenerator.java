@@ -30,6 +30,19 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
         return headerForExporModelHierarchy;
     }
 
+    @Override
+    public String printImpex(Set<T> models) {
+        List<String> collect = models.stream().map(this::printImpex).collect(Collectors.toList());
+
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : collect) {
+            sb.append(s).append(AbstractImpexGenerator.LINE_BREAK_CHAR);
+        }
+
+        return sb.toString();
+    }
+
     private String generateHeaderForAllTypes(T model) {
         List<String> typeList = makeTypeToExportList();
         Map<String, Set<PK>> stringSetMap = makePkMap(model);

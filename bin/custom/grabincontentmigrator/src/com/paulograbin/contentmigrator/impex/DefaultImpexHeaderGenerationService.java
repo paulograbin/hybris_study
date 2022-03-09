@@ -43,8 +43,7 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     public Optional<String> generateHeaderForType(ItemModel model) {
 
         String headerForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(model.getItemtype());
-        if(StringUtils.isNotBlank(headerForItemType))
-        {
+        if (StringUtils.isNotBlank(headerForItemType)) {
             return Optional.of(appendWhereClause(headerForItemType + "\n", model.getItemtype()));
         }
 
@@ -72,13 +71,13 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
 
     @Override
     public Optional<String> generateHeaderForTypeFromString(String typeName) {
-
         String hardCodedHeaderForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(typeName);
-        if(StringUtils.isNotBlank(hardCodedHeaderForItemType))
-        {
+        if (StringUtils.isNotBlank(hardCodedHeaderForItemType)) {
             LOG.info("Found hardcoded header for type " + typeName);
             return Optional.of(appendWhereClause(hardCodedHeaderForItemType + "\n", typeName));
         }
+
+        LOG.info("Hardcoded header not found, will generated a new one for " + typeName);
 
         HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
         Set<Language> langs = new HashSet<>();
@@ -101,7 +100,6 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
 
         return Optional.empty();
     }
-
 
     @Override
     public Optional<String> generateHeaderForTypes(List<String> itemModelList) {
