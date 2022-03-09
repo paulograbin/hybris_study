@@ -23,7 +23,7 @@
 	</div>
 
 	<div class="write-review js-review-write">
-		<form:form method="post" action="${productReviewActionUrl}" commandName="reviewForm">
+		<form:form method="post" action="${productReviewActionUrl}" modelAttribute="reviewForm">
 			<div class="form-group">
 				<formElement:formInputBox idKey="review.headline" labelKey="review.headline" path="headline" inputCSS="form-control" mandatory="true"/>
 			</div>
