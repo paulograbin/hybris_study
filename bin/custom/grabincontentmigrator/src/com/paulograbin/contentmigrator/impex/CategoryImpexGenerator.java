@@ -42,26 +42,6 @@ public class CategoryImpexGenerator extends AbstractImpexGenerator<CategoryModel
     }
 
     @Override
-    public Map<String, Set<PK>> makePkMap(CategoryModel model) {
-        Map<String, Set<PK>> itemTypeToPksMap = new HashMap<>();
-
-        List<KeywordModel> keywords = model.getKeywords();
-        Set<PK> keywordPks = new HashSet<>();
-        for(KeywordModel keyword: keywords) {
-            LOG.info("Keyword: " + keyword.getKeyword() + " - " + keyword.getPk());
-            keywordPks.add(keyword.getPk());
-        }
-        itemTypeToPksMap.put(KeywordModel._TYPECODE, keywordPks);
-
-        Set<PK> categoryPks = new HashSet<>();
-        LOG.info("Category: " + model.getCode() + " - " + model.getPk());
-        categoryPks.add(model.getPk());
-
-        itemTypeToPksMap.put(CategoryModel._TYPECODE, categoryPks);
-        return itemTypeToPksMap;
-    }
-
-    @Override
     public List<String> makeTypeToExportList() {
         List<String> typeList = new ArrayList<>();
 

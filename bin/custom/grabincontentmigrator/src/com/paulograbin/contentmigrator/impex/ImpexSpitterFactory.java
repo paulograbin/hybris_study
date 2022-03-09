@@ -13,4 +13,6 @@ public interface ImpexSpitterFactory {
 
     void test();
 
+    boolean checkTypeSupported(Object next);
+
 }

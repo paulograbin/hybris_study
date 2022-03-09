@@ -53,6 +53,15 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
     }
 
     @Override
+    public boolean checkTypeSupported(Object object) {
+        registerGenerators();
+
+        ItemModel object1 = (ItemModel) object;
+
+        return map.containsKey(object1.getItemtype());
+    }
+
+    @Override
     public ExportResult export(ItemModel itemModel) {
         registerGenerators();
 
