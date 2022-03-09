@@ -11,6 +11,7 @@ import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.media.MediaService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import org.apache.log4j.Logger;
+import org.zkoss.zhtml.Messagebox;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashSet;
@@ -55,8 +56,7 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet, String
             LOG.info("Data to export " + dataToExport.size());
 
             if (dataToExport.isEmpty()) {
-//                Show message asking user to select items
-
+                Messagebox.show("To use the export feature you must select at least one in the list below", "title", null, org.zkoss.zul.Messagebox.EXCLAMATION, null);
             } else {
                 if (dataToExport.size() == 1) {
                     LOG.info("Exporting single model...");
