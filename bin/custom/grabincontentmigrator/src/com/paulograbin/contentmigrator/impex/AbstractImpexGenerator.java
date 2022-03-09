@@ -13,7 +13,7 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
 
     private static final Logger LOG = Logger.getLogger(AbstractImpexGenerator.class);
     private static final String LINE_BREAK_CHAR = "\n";
-
+    private final String WHERE_CLAUSE = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} where {pk} in ('%2') \"\" );\"";
 
     private final ImpexHeaderGenerationService impexHeaderGenerationService1;
 
@@ -45,35 +45,29 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
 
     private String generateHeaderForAllTypes(T model) {
         List<String> typeList = makeTypeToExportList();
-        Map<String, Set<PK>> stringSetMap = makePkMap(model);
+        Set<PK> pksForType = makePkList(model);
 
         StringBuilder sb = new StringBuilder();
 
         for (String currentType : typeList) {
-            Set<PK> pksForType = stringSetMap.get(currentType);
             if(CollectionUtils.isNotEmpty(pksForType)) {
-                Optional<String> generatedHeaderOptional = impexHeaderGenerationService1.generateHeaderForTypeFromString(currentType);
-                String s = generatedHeaderOptional.orElse("");
-                String whereClause = makeWhereClause(pksForType);
-
-                s = s.replace("%2", whereClause);
-
-                sb.append(s).append(LINE_BREAK_CHAR);
+                String generatedHeader = impexHeaderGenerationService1.generateImpexHeaderForType(currentType).orElseThrow(IllegalStateException::new);
+                String whereClause = makeWhereClause(currentType, pksForType);
+                sb.append(generatedHeader).append(whereClause);
             }
         }
 
         return sb.toString();
     }
 
-    private String makeWhereClause(Set<PK> pksToExport) {
-        return pksToExport.stream()
+    private String makeWhereClause(String typeCode, Set<PK> pksToExport) {
+        String pks = pksToExport.stream()
                 .map(PK::toString)
                 .collect(Collectors.joining("','"));
+        return WHERE_CLAUSE.replace("%1", typeCode).replace("%2", pks).concat(LINE_BREAK_CHAR);
     }
 
     public abstract Set<PK> makePkList(T model);
-
-    public abstract Map<String, Set<PK>> makePkMap(T model);
 
     public List<String> makeTypeToExportList() {
         return Collections.emptyList();

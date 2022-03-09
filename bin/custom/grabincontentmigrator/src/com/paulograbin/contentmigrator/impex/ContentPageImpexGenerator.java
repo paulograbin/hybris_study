@@ -28,12 +28,6 @@ public class ContentPageImpexGenerator extends AbstractImpexGenerator<ContentPag
     }
 
     @Override
-    public Map<String, Set<PK>> makePkMap(ContentPageModel model) {
-        return null;
-    }
-
-
-    @Override
     public List<String> makeTypeToExportList() {
         List<String> typeList = new ArrayList<>();
 

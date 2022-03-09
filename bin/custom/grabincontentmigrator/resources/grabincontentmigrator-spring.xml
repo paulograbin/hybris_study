@@ -72,12 +72,18 @@
 	  -->
 
 
-
+	<bean id="contentDumpImpexGenerator" class="com.paulograbin.contentmigrator.impex.impl.ContentDumpImpexGenerator" />
+	<bean id="productDumpImpexGenerator" class="com.paulograbin.contentmigrator.impex.impl.ProductDumpImpexGenerator" />
 
 	<alias name="defaultImpexSpitterFactory" alias="impexSpitterFactory"/>
-	<bean id="defaultImpexSpitterFactory" class="com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory"/>
-
-
+	<bean id="defaultImpexSpitterFactory" class="com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory">
+		<property name="dumpExportStrategiesMap">
+			<map key-type="com.paulograbin.contentmigrator.enums.DataDumpExportType" value-type="com.paulograbin.contentmigrator.impex.DumpImpexGenerator">
+				<entry key="PRODUCT" value-ref="productDumpImpexGenerator"/>
+				<entry key="CONTENT" value-ref="contentDumpImpexGenerator"/>
+			</map>
+		</property>
+	</bean>
 
 	<alias name="defaultImpexHeaderGenerationService" alias="impexHeaderGenerationService"/>
 	<bean id="defaultImpexHeaderGenerationService" class="com.paulograbin.contentmigrator.impex.DefaultImpexHeaderGenerationService"/>

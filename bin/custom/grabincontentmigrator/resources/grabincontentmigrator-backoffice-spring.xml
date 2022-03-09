@@ -14,4 +14,9 @@
   		<property name="name" value="labels"/>
   	</bean>
 
+	<alias name="defaultBackofficeImpExDumpWizardHandler" alias="backofficeImpExDumpWizardHandler"/>
+	<bean id="defaultBackofficeImpExDumpWizardHandler"
+		  class="com.paulograbin.contentmigrator.widgets.impexdump.ImpExDumpWizardHandler">
+	</bean>
+
 </beans>

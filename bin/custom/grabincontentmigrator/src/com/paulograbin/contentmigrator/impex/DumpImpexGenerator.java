@@ -1,10 +1,8 @@
 package com.paulograbin.contentmigrator.impex;
 
-import de.hybris.platform.core.model.ItemModel;
+import de.hybris.platform.catalog.model.CatalogVersionModel;
 
 
-public interface DumpImpexGenerator<T extends ItemModel> {
-
-    String generateDump(String itemTypeName);
-
+public interface DumpImpexGenerator {
+    String generateDump(CatalogVersionModel catalogVersionModel);
 }
