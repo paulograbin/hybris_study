@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractImpexGenerator<T extends ItemModel> implements ImpexGenerator<T> {
 
     private static final Logger LOG = Logger.getLogger(AbstractImpexGenerator.class);
-    private static final String NEW_LINE_CHARACTER = "\n";
+    private static final String LINE_BREAK_CHAR = "\n";
 
 
     private final ImpexHeaderGenerationService impexHeaderGenerationService1;
@@ -45,7 +45,7 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
 
                 s = s.replace("%2", whereClause);
 
-                sb.append(s).append(NEW_LINE_CHARACTER);
+                sb.append(s).append(LINE_BREAK_CHAR);
             }
         }
 
