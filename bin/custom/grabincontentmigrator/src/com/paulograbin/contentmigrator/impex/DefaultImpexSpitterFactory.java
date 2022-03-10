@@ -82,19 +82,19 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
     }
 
     @Override
-    public ExportResult exportMultiple(Set<ItemModel> itemModel) {
+    public ExportResult exportMultiple(Set<ItemModel> items) {
         registerGenerators();
 
 //        Check if models from multiple types were selected because in such case next line may not be enough
 
-        ItemModel firstElement = itemModel.iterator().next();
+        ItemModel firstElement = items.iterator().next();
 
         ImpexGenerator impexGenerator = map.get(firstElement.getItemtype());
         if (impexGenerator == null) {
             throw new IllegalStateException("No instance of ImpexGenerator configured for item type " + firstElement.getItemtype());
         }
 
-        String s = impexGenerator.printImpex(itemModel);
+        String s = impexGenerator.printImpex(items);
 
         ExportResult exportResult = runExport(s);
         printExportResult(exportResult);
