@@ -2,11 +2,7 @@ package com.paulograbin.contentmigrator.impex;
 
 import com.paulograbin.contentmigrator.enums.DataDumpExportType;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
-import de.hybris.platform.category.model.CategoryModel;
-import de.hybris.platform.cms2.model.pages.ContentPageModel;
-import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.ItemModel;
-import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.hac.data.form.ImpexContentFormData;
 import de.hybris.platform.impex.enums.ImpExValidationModeEnum;
 import de.hybris.platform.impex.model.ImpExMediaModel;
@@ -15,96 +11,55 @@ import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.impex.ExportService;
 import de.hybris.platform.servicelayer.impex.ImpExValidationResult;
 import de.hybris.platform.servicelayer.impex.impl.StreamBasedImpExResource;
-import de.hybris.platform.servicelayer.model.AbstractItemModel;
-import de.hybris.platform.servicelayer.model.ModelService;
 import org.apache.log4j.Logger;
 
-import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static org.apache.commons.lang.CharEncoding.UTF_8;
 
 
 public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
 
     private static final Logger LOG = Logger.getLogger(DefaultImpexSpitterFactory.class);
 
-
-    @Resource
-    private ModelService modelService;
-
-    @Resource
     private ExportService exportService;
-
-    @Resource
-    private ImpexHeaderGenerationService impexHeaderGenerationService;
-
     private Map<DataDumpExportType, DumpImpexGenerator> dumpExportStrategiesMap;
+    private Map<String, ImpexGenerator> exportStrategiesMap;
 
-
-    private final Map<String, ImpexGenerator> map;
-
-    public DefaultImpexSpitterFactory() {
-        map = new HashMap<>(10);
-//        registerGenerators();
-    }
-
-    private void registerGenerators() {
-        map.put(ContentPageModel._TYPECODE, new ContentPageImpexGenerator(impexHeaderGenerationService));
-        map.put(CategoryModel._TYPECODE, new CategoryImpexGenerator(impexHeaderGenerationService));
-        map.put(ProductModel._TYPECODE, new ProductImpexGenerator(impexHeaderGenerationService));
+    @Override
+    public boolean checkTypeSupported(ItemModel item) {
+        return exportStrategiesMap.containsKey(item.getItemtype());
     }
 
     @Override
-    public boolean checkTypeSupported(Object object) {
-        registerGenerators();
+    public ExportResult export(ItemModel item) {
+        ImpexGenerator impexGenerator = getImpexGeneratorForTypeCode(item);
+        String exportImpexHeader = impexGenerator.generateImpex(item);
 
-        ItemModel object1 = (ItemModel) object;
-
-        return map.containsKey(object1.getItemtype());
-    }
-
-    @Override
-    public ExportResult export(ItemModel itemModel) {
-        registerGenerators();
-
-        ImpexGenerator impexGenerator = map.get(itemModel.getItemtype());
-        if (impexGenerator == null) {
-            throw new IllegalStateException("No instance of ImpexGenerator configured for item type " + itemModel.getItemtype());
-        }
-        String s = impexGenerator.printImpex(itemModel);
-
-        ExportResult exportResult = runExport(s);
+        ExportResult exportResult = runExport(exportImpexHeader);
         printExportResult(exportResult);
 
         return exportResult;
     }
 
-    @Override
     public ExportResult exportMultiple(Set<ItemModel> items) {
-        registerGenerators();
-
 //        Check if models from multiple types were selected because in such case next line may not be enough
 
         ItemModel firstElement = items.iterator().next();
 
-        ImpexGenerator impexGenerator = map.get(firstElement.getItemtype());
-        if (impexGenerator == null) {
-            throw new IllegalStateException("No instance of ImpexGenerator configured for item type " + firstElement.getItemtype());
-        }
+        ImpexGenerator impexGenerator = getImpexGeneratorForTypeCode(firstElement);
+        String exportImpexHeader = impexGenerator.generateImpex(items);
 
-        String s = impexGenerator.printImpex(items);
-
-        ExportResult exportResult = runExport(s);
+        ExportResult exportResult = runExport(exportImpexHeader);
         printExportResult(exportResult);
 
         return exportResult;
     }
 
     @Override
-    public ExportResult exportMultiple(DataDumpExportType dumpExportType, CatalogVersionModel catalogVersionModel) {
-
+    public ExportResult exportDataDump(DataDumpExportType dumpExportType, CatalogVersionModel catalogVersionModel) {
         DumpImpexGenerator dumpImpexGenerator = this.getDumpExportStrategiesMap().get(dumpExportType);
         String impexDump = dumpImpexGenerator.generateDump(catalogVersionModel);
 
@@ -114,30 +69,12 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         return exportResult;
     }
 
-    @Override
-    public void test() {
-        registerGenerators();
-
-        long itemToExport = 8796158592048L;
-        PK pk = PK.fromLong(itemToExport);
-
-        ItemModel o = modelService.get(pk);
-        AbstractItemModel abstractItemModel = o;
-
-//        Optional<String> s1 = impexHeaderGenerationService.generateHeaderForType(o);
-//        String s = s1.get();
-//        LOG.info("Header geerated " + s);
-//        Optional<String> s2 = generateHeaderForType(abstractItemModel);
-
-        ImpexGenerator<ContentPageModel> impexGenerator = map.get(o.getItemtype());
-        String s = impexGenerator.printImpex((ContentPageModel) o);
-
-//        PageTemplateModel masterTemplate = ((ContentPageModel) o).getMasterTemplate();
-//        map.get(masterTemplate.getItemtype()).printImpex(masterTemplate);
-
-        ExportResult exportResult = runExport(s);
-        printExportResult(exportResult);
-
+    private ImpexGenerator getImpexGeneratorForTypeCode(ItemModel firstElement) {
+        ImpexGenerator impexGenerator = exportStrategiesMap.get(firstElement.getItemtype());
+        if (impexGenerator == null) {
+            throw new IllegalStateException("No instance of ImpexGenerator configured for item type " + firstElement.getItemtype());
+        }
+        return impexGenerator;
     }
 
     private void printExportResult(ExportResult exportResult) {
@@ -147,7 +84,7 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         LOG.info(exportResult.isSuccessful());
         LOG.info(exportResult.isError());
         LOG.info("Exported data: " + exportedData.getLocation());
-        LOG.info("Exported data: " + "https://electronics.local:9002" + exportedData.getDownloadURL());
+        //TODO include full url to download
         LOG.info("Internal URL: " + exportedData.getInternalURL());
         LOG.info("Size: " + exportedData.getSize());
         LOG.info("Encoding: " + exportedData.getEncoding());
@@ -157,12 +94,12 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
 
         LOG.info("Exported media: " + exportedMedia.getLocation());
         LOG.info("Exported media: " + exportedMedia.getSize());
-        LOG.info("Exported media: " + "https://electronics.local:9002" + exportedMedia.getDownloadURL());
+        //TODO include full url to download
     }
 
     private ExportResult runExport(String s) {
         ImpexContentFormData contentFormData = new ImpexContentFormData();
-        contentFormData.setEncoding("UTF-8");
+        contentFormData.setEncoding(UTF_8);
         contentFormData.setValidationEnum(ImpExValidationModeEnum.EXPORT_ONLY);
 
         contentFormData.setScriptContent(s);
@@ -180,11 +117,27 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         return this.exportService.exportData(exportConfig);
     }
 
+    public ExportService getExportService() {
+        return exportService;
+    }
+
+    public void setExportService(ExportService exportService) {
+        this.exportService = exportService;
+    }
+
     public Map<DataDumpExportType, DumpImpexGenerator> getDumpExportStrategiesMap() {
         return dumpExportStrategiesMap;
     }
 
     public void setDumpExportStrategiesMap(Map<DataDumpExportType, DumpImpexGenerator> dumpExportStrategiesMap) {
         this.dumpExportStrategiesMap = dumpExportStrategiesMap;
+    }
+
+    public Map<String, ImpexGenerator> getExportStrategiesMap() {
+        return exportStrategiesMap;
+    }
+
+    public void setExportStrategiesMap(Map<String, ImpexGenerator> exportStrategiesMap) {
+        this.exportStrategiesMap = exportStrategiesMap;
     }
 }

@@ -18,7 +18,6 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
     private static final Logger LOG = Logger.getLogger(ExportMultipleAction.class);
 
     private static final String CONFIRMATION_MESSAGE = "hmc.action.confirmpickup.confirmation.message";
-    private static final String CONFIRM_PICKUP_EVENT = "grabinbackoffice.confirmpickup.event";
 
     @Resource(name = "impexSpitterFactory")
     private DefaultImpexSpitterFactory impexSpitterFactory;
@@ -40,8 +39,11 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
         } else {
 
             Object next = data.iterator().next();
+            if (!(next instanceof ItemModel)) {
+                return false;
+            }
 
-            boolean b = impexSpitterFactory.checkTypeSupported(next);
+            boolean b = impexSpitterFactory.checkTypeSupported((ItemModel) next);
 
             LOG.info("Can perform? " + b + " (" + data.size() + ")");
 
@@ -55,7 +57,7 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
 
             LinkedHashSet dataToExport = ctx.getData();
             LOG.info("Data to export " + dataToExport.size());
-            if (!impexSpitterFactory.checkTypeSupported(dataToExport.iterator().next())) {
+            if (!impexSpitterFactory.checkTypeSupported((ItemModel) dataToExport.iterator().next())) {
                 Messagebox.show("The item type you selected to export does not have an impex generator implemented yet", "title", null, org.zkoss.zul.Messagebox.ERROR, null);
 
                 return new ActionResult(ActionResult.ERROR);

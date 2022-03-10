@@ -9,14 +9,12 @@ import java.util.Set;
 
 public interface ImpexSpitterFactory {
 
-    ExportResult export(ItemModel itemModel);
+    ExportResult export(ItemModel item);
 
-    ExportResult exportMultiple(Set<ItemModel> itemModel);
+    ExportResult exportMultiple(Set<ItemModel> items);
 
-    ExportResult exportMultiple(DataDumpExportType dumpExportType, CatalogVersionModel catalogVersionModel);
+    ExportResult exportDataDump(DataDumpExportType dumpExportType, CatalogVersionModel catalogVersion);
 
-    void test();
-
-    boolean checkTypeSupported(Object next);
+    boolean checkTypeSupported(ItemModel item);
 
 }
