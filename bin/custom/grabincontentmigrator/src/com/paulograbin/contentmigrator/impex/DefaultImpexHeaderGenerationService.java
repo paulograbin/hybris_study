@@ -1,7 +1,6 @@
 package com.paulograbin.contentmigrator.impex;
 
 import com.paulograbin.contentmigrator.service.HardCodedHeaderService;
-import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.impex.jalo.exp.generator.HeaderLibraryGenerator;
 import de.hybris.platform.jalo.c2l.Language;
 import de.hybris.platform.jalo.type.ComposedType;
@@ -14,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class DefaultImpexHeaderGenerationService implements ImpexHeaderGenerationService {
@@ -30,7 +29,6 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     @Resource
     private HardCodedHeaderService hardCodedHeaderService;
 
-    private final String FOOTER = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1} where {pk} in ('%2') \"\" );\"";
 
     @Autowired
     public DefaultImpexHeaderGenerationService(ModelService modelService, TypeService typeService, CommonI18NService commonI18NService) {
@@ -40,100 +38,31 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
     }
 
     @Override
-    public Optional<String> generateHeaderForType(ItemModel model) {
-
-        String headerForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(model.getItemtype());
-        if (StringUtils.isNotBlank(headerForItemType)) {
-            return Optional.of(appendWhereClause(headerForItemType + "\n", model.getItemtype()));
-        }
-
-        HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
-        Set<Language> langs = new HashSet<>();
-        langs.add(modelService.getSource(commonI18NService.getLanguage("en")));
-
-        Set<ComposedType> composedTypes = new HashSet<>();
-        composedTypes.add(modelService.getSource(typeService.getComposedTypeForCode(model.getItemtype())));
-
-        generator.setLanguages(langs);
-        generator.setTypes(composedTypes);
-        try {
-            String s = generator.generateScript();
-            String processedHeader = processHeaderGenerated(s);
-            String finalHeader = appendWhereClause(processedHeader, model.getItemtype());
-
-            return Optional.of(finalHeader);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<String> generateHeaderForTypeFromString(String typeName) {
+    public Optional<String> generateImpexHeaderForType(String typeName) {
         String hardCodedHeaderForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(typeName);
         if (StringUtils.isNotBlank(hardCodedHeaderForItemType)) {
             LOG.info("Found hardcoded header for type " + typeName);
-            return Optional.of(appendWhereClause(hardCodedHeaderForItemType + "\n", typeName));
+            return Optional.of(hardCodedHeaderForItemType + "\n");
         }
 
         LOG.info("Hardcoded header not found, will generated a new one for " + typeName);
-
         HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
-        Set<Language> langs = new HashSet<>();
-        langs.add(modelService.getSource(commonI18NService.getLanguage("en")));
-
         Set<ComposedType> composedTypes = new HashSet<>();
+
+        generator.setLanguages(getAvailableLanguages());
+        generator.setTypes(composedTypes);
         composedTypes.add(modelService.getSource(typeService.getComposedTypeForCode(typeName)));
 
-        generator.setLanguages(langs);
-        generator.setTypes(composedTypes);
-        try {
-            String s = generator.generateScript();
-            String processedHeader = processHeaderGenerated(s);
-            String finalHeader = appendWhereClause(processedHeader, typeName);
-
-            return Optional.of(finalHeader);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-
-        return Optional.empty();
+        String s = generator.generateScript();
+        return Optional.of(processHeaderGenerated(s));
     }
 
-    @Override
-    public Optional<String> generateHeaderForTypes(List<String> itemModelList) {
-        HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
-        Set<Language> langs = new HashSet<>();
-        langs.add(modelService.getSource(commonI18NService.getLanguage("en")));
-
-        Set<ComposedType> composedTypes = new HashSet<>();
-
-        for (String itemModel : itemModelList) {
-            composedTypes.add(modelService.getSource(typeService.getComposedTypeForCode(itemModel)));
-        }
-
-        generator.setLanguages(langs);
-        generator.setTypes(composedTypes);
-        try {
-            String s = generator.generateScript();
-            String processedHeader = processHeaderGenerated(s);
-//            String finalHeader = appendWhereClause(processedHeader, model.getItemtype());
-
-
-            return Optional.of(processedHeader);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-
-        return Optional.empty();
-    }
-
-    private String appendWhereClause(String processedHeader, String typeName) {
-        String stepOne = FOOTER.replace("%1", typeName);
-        return processedHeader
-                .concat(stepOne)
-                .concat("\n");
+    private Set<Language> getAvailableLanguages() {
+        //TODO create property to control exported languages
+        return commonI18NService.getAllLanguages().stream()
+                .map(modelService::getSource)
+                .map(Language.class::cast)
+                .collect(Collectors.toSet());
     }
 
     private String processHeaderGenerated(String s) {
@@ -149,6 +78,8 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
                 .replace("[forceWrite = true]", "")
                 .replace("[forceWrite=true]", "")
                 .replace("velocityTemplate", "")
+                .replace("owner(&Item)[forceWrite=true];", "")
+                .replace("owner(&Item)[forceWrite=true]", "")
                 .replace("modifiedtime[dateformat=dd.MM.yyyy hh:mm:ss];", "")
                 .replace("creationtime[forceWrite=true,dateformat=dd.MM.yyyy hh:mm:ss];", "");
     }

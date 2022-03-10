@@ -1,5 +1,7 @@
 package com.paulograbin.contentmigrator.impex;
 
+import com.paulograbin.contentmigrator.enums.DataDumpExportType;
+import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
 import de.hybris.platform.core.PK;
@@ -37,6 +39,8 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
 
     @Resource
     private ImpexHeaderGenerationService impexHeaderGenerationService;
+
+    private Map<DataDumpExportType, DumpImpexGenerator> dumpExportStrategiesMap;
 
 
     private final Map<String, ImpexGenerator> map;
@@ -93,6 +97,18 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         String s = impexGenerator.printImpex(itemModel);
 
         ExportResult exportResult = runExport(s);
+        printExportResult(exportResult);
+
+        return exportResult;
+    }
+
+    @Override
+    public ExportResult exportMultiple(DataDumpExportType dumpExportType, CatalogVersionModel catalogVersionModel) {
+
+        DumpImpexGenerator dumpImpexGenerator = this.getDumpExportStrategiesMap().get(dumpExportType);
+        String impexDump = dumpImpexGenerator.generateDump(catalogVersionModel);
+
+        ExportResult exportResult = runExport(impexDump);
         printExportResult(exportResult);
 
         return exportResult;
@@ -162,5 +178,13 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         LOG.info("Validation result: " + impExValidationResult.isSuccessful());
 
         return this.exportService.exportData(exportConfig);
+    }
+
+    public Map<DataDumpExportType, DumpImpexGenerator> getDumpExportStrategiesMap() {
+        return dumpExportStrategiesMap;
+    }
+
+    public void setDumpExportStrategiesMap(Map<DataDumpExportType, DumpImpexGenerator> dumpExportStrategiesMap) {
+        this.dumpExportStrategiesMap = dumpExportStrategiesMap;
     }
 }
