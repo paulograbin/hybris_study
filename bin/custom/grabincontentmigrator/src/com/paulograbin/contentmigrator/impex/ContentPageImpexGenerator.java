@@ -2,11 +2,16 @@ package com.paulograbin.contentmigrator.impex;
 
 import de.hybris.platform.acceleratorcms.model.components.JspIncludeComponentModel;
 import de.hybris.platform.acceleratorcms.model.components.SimpleBannerComponentModel;
+import de.hybris.platform.acceleratorservices.model.cms2.pages.DocumentPageModel;
+import de.hybris.platform.acceleratorservices.model.cms2.pages.EmailPageModel;
 import de.hybris.platform.cms2.model.contents.components.AbstractCMSComponentModel;
 import de.hybris.platform.cms2.model.contents.components.CMSParagraphComponentModel;
 import de.hybris.platform.cms2.model.contents.contentslot.ContentSlotModel;
+import de.hybris.platform.cms2.model.pages.CatalogPageModel;
+import de.hybris.platform.cms2.model.pages.CategoryPageModel;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
 import de.hybris.platform.cms2.model.pages.PageTemplateModel;
+import de.hybris.platform.cms2.model.pages.ProductPageModel;
 import de.hybris.platform.cms2.model.relations.ContentSlotForPageModel;
 import de.hybris.platform.cms2.model.relations.ContentSlotForTemplateModel;
 import de.hybris.platform.core.PK;
@@ -16,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.*;
 
 
 public class ContentPageImpexGenerator extends AbstractImpexGenerator<ContentPageModel> implements ImpexGenerator<ContentPageModel> {
@@ -28,16 +32,16 @@ public class ContentPageImpexGenerator extends AbstractImpexGenerator<ContentPag
     }
 
     @Override
-    public Map<String, Set<PK>> makePkMap(ContentPageModel model) {
-        return null;
-    }
-
-
-    @Override
     public List<String> makeTypeToExportList() {
         List<String> typeList = new ArrayList<>();
 
         typeList.add(ContentPageModel._TYPECODE);
+        typeList.add(ProductPageModel._TYPECODE);
+        typeList.add(CatalogPageModel._TYPECODE);
+        typeList.add(CategoryPageModel._TYPECODE);
+        typeList.add(EmailPageModel._TYPECODE);
+        typeList.add(DocumentPageModel._TYPECODE);
+
         typeList.add(PageTemplateModel._TYPECODE);
         typeList.add(ContentSlotModel._TYPECODE);
         typeList.add(ContentSlotForTemplateModel._TYPECODE);

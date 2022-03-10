@@ -2,10 +2,12 @@ package com.paulograbin.contentmigrator.impex;
 
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.ItemModel;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -24,42 +26,42 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
 
     @Override
     public String printImpex(T model) {
-        String headerForExporModelHierarchy = generateHeaderForAllTypes(model);
+        Set<PK> pksToExport = makePkList(model);
+        String whereClause = makeWhereClause(pksToExport);
+
+        String headerForExporModelHierarchy = generateHeaderForAllTypes(whereClause);
         LOG.info(headerForExporModelHierarchy);
 
         return headerForExporModelHierarchy;
     }
 
-    @Override
-    public String printImpex(Set<T> models) {
-        List<String> collect = models.stream().map(this::printImpex).collect(Collectors.toList());
+    private String generateHeaderForAllTypes(String pksForWhereClause) {
+        List<String> typeList = makeTypeToExportList();
 
         StringBuilder sb = new StringBuilder();
 
-        for (String s : collect) {
-            sb.append(s).append(AbstractImpexGenerator.LINE_BREAK_CHAR);
+        for (String currentType : typeList) {
+            Optional<String> generatedHeaderOptional = impexHeaderGenerationService1.generateHeaderForTypeFromString(currentType);
+            String s = generatedHeaderOptional.orElse("");
+
+            s = s.replace("%2", pksForWhereClause);
+
+            sb.append(s).append(LINE_BREAK_CHAR);
         }
 
         return sb.toString();
     }
 
-    private String generateHeaderForAllTypes(T model) {
-        List<String> typeList = makeTypeToExportList();
-        Map<String, Set<PK>> stringSetMap = makePkMap(model);
+    @Override
+    public String printImpex(Set<T> models) {
+        List<String> collect = models.stream()
+                .map(this::printImpex)
+                .collect(Collectors.toList());
 
         StringBuilder sb = new StringBuilder();
 
-        for (String currentType : typeList) {
-            Set<PK> pksForType = stringSetMap.get(currentType);
-            if(CollectionUtils.isNotEmpty(pksForType)) {
-                Optional<String> generatedHeaderOptional = impexHeaderGenerationService1.generateHeaderForTypeFromString(currentType);
-                String s = generatedHeaderOptional.orElse("");
-                String whereClause = makeWhereClause(pksForType);
-
-                s = s.replace("%2", whereClause);
-
-                sb.append(s).append(LINE_BREAK_CHAR);
-            }
+        for (String s : collect) {
+            sb.append(s).append(AbstractImpexGenerator.LINE_BREAK_CHAR);
         }
 
         return sb.toString();
@@ -72,8 +74,6 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
     }
 
     public abstract Set<PK> makePkList(T model);
-
-    public abstract Map<String, Set<PK>> makePkMap(T model);
 
     public List<String> makeTypeToExportList() {
         return Collections.emptyList();

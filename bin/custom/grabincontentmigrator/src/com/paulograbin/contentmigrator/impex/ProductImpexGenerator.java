@@ -20,7 +20,6 @@ public class ProductImpexGenerator extends AbstractImpexGenerator<ProductModel> 
         super(impexHeaderGenerationService1);
     }
 
-    @Override
     public Map<String, Set<PK>> makePkMap(ProductModel model) {
         Map<String, Set<PK>> itemTypeToPksMap = new HashMap<>();
 
