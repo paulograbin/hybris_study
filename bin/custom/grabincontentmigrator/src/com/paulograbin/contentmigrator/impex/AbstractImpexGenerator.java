@@ -18,7 +18,7 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
     private static final String LINE_BREAK_CHAR = "\n";
     private static final String WHERE_CLAUSE = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} where {pk} in ('%2') \"\" );\"";
 
-    private final ImpexHeaderGenerationService impexHeaderGenerationService;
+    private ImpexHeaderGenerationService impexHeaderGenerationService;
 
     public AbstractImpexGenerator(ImpexHeaderGenerationService impexHeaderGenerationService1) {
         this.impexHeaderGenerationService = impexHeaderGenerationService1;
@@ -26,7 +26,7 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
 
 
     @Override
-    public String printImpex(T model) {
+    public String generateImpex(T model) {
         List<String> typeList = makeTypeToExportList();
         Set<PK> pksForType = makePkList(model);
 
@@ -45,9 +45,9 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
     }
 
     @Override
-    public String printImpex(Set<T> models) {
+    public String generateImpex(Set<T> models) {
         List<String> collect = models.stream()
-                .map(this::printImpex)
+                .map(this::generateImpex)
                 .collect(Collectors.toList());
 
         StringBuilder sb = new StringBuilder();
@@ -71,5 +71,13 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
 
     public List<String> makeTypeToExportList() {
         return Collections.emptyList();
+    }
+
+    public ImpexHeaderGenerationService getImpexHeaderGenerationService() {
+        return impexHeaderGenerationService;
+    }
+
+    public void setImpexHeaderGenerationService(ImpexHeaderGenerationService impexHeaderGenerationService) {
+        this.impexHeaderGenerationService = impexHeaderGenerationService;
     }
 }

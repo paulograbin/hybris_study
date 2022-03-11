@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ImpexGenerator<T extends ItemModel> {
 
-    String printImpex(T model);
+    String generateImpex(T model);
 
-    String printImpex(Set<T> models);
+    String generateImpex(Set<T> models);
 }

@@ -26,10 +26,7 @@ public class ImpExDumpWizardHandler implements FlowActionHandler {
         CatalogVersionModel catalogVersion = adapter.getWidgetInstanceManager().getModel().getValue("impexDumpConfigurationForm.catalogVersionModel", CatalogVersionModel.class);
         DataDumpExportType dumpType = adapter.getWidgetInstanceManager().getModel().getValue("impexDumpConfigurationForm.dataDumpExportType", DataDumpExportType.class);
 
-        ExportResult result = impexSpitterFactory.exportMultiple(dumpType, catalogVersion);
+        ExportResult result = impexSpitterFactory.exportDataDump(dumpType, catalogVersion);
         FileDownloadHelper.executeMediaDownload(mediaService, result.getExportedData());
-
-        //TODO: close
-
     }
 }

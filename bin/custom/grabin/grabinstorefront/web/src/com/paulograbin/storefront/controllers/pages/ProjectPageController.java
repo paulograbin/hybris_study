@@ -42,9 +42,6 @@ public class ProjectPageController extends AbstractPageController {
     @Resource(name = "projectFacade")
     private ProjectFacade projectFacade;
 
-    @Resource
-    private ImpexSpitterFactory impexSpitterFactory;
-
     @RequestMapping(method = RequestMethod.GET)
     public String productDetail(final Model model, final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException, UnsupportedEncodingException {
         final List<ProjectData> projectModels = projectFacade.loadAll();
@@ -77,8 +74,6 @@ public class ProjectPageController extends AbstractPageController {
 //                }
 //            }
 //        }
-
-        impexSpitterFactory.test();
 
         return getViewForPage(model);
 //        return "pages/projects/projectPage";
