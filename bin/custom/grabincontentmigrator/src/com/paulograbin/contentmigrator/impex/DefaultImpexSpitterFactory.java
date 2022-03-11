@@ -81,20 +81,20 @@ public class DefaultImpexSpitterFactory implements ImpexSpitterFactory {
         ImpExMediaModel exportedData = exportResult.getExportedData();
         ImpExMediaModel exportedMedia = exportResult.getExportedMedia();
 
-        LOG.info(exportResult.isSuccessful());
-        LOG.info(exportResult.isError());
-        LOG.info("Exported data: " + exportedData.getLocation());
-        //TODO include full url to download
-        LOG.info("Internal URL: " + exportedData.getInternalURL());
-        LOG.info("Size: " + exportedData.getSize());
-        LOG.info("Encoding: " + exportedData.getEncoding());
-        LOG.info("Extraction id: " + exportedData.getExtractionId());
-        LOG.info("Zip entry: " + exportedData.getZipentry());
-        LOG.info("Real file name: " + exportedData.getRealFileName());
+        if (exportResult.isSuccessful()) {
+            LOG.info("Exported data: " + exportedData.getLocation());
+            LOG.info("Exported data: " + "https://electronics.local:9002" + exportedData.getDownloadURL());
+            LOG.info("Internal URL: " + exportedData.getInternalURL());
+            LOG.info("Size: " + exportedData.getSize());
+            LOG.info("Encoding: " + exportedData.getEncoding());
+            LOG.info("Extraction id: " + exportedData.getExtractionId());
+            LOG.info("Zip entry: " + exportedData.getZipentry());
+            LOG.info("Real file name: " + exportedData.getRealFileName());
 
-        LOG.info("Exported media: " + exportedMedia.getLocation());
-        LOG.info("Exported media: " + exportedMedia.getSize());
-        //TODO include full url to download
+            LOG.info("Exported media: " + exportedMedia.getLocation());
+            LOG.info("Exported media: " + exportedMedia.getSize());
+            LOG.info("Exported media: " + "https://electronics.local:9002" + exportedMedia.getDownloadURL());
+        }
     }
 
     private ExportResult runExport(String s) {
