@@ -23,6 +23,7 @@
 	<bean id="contentPageImpexGenerator" parent="abstractImpexGenerator" class="com.paulograbin.contentmigrator.impex.ContentPageImpexGenerator" />
 	<bean id="categoryImpexGenerator" parent="abstractImpexGenerator" class="com.paulograbin.contentmigrator.impex.CategoryImpexGenerator" />
 	<bean id="productImpexGenerator" parent="abstractImpexGenerator" class="com.paulograbin.contentmigrator.impex.ProductImpexGenerator" />
+	<bean id="abstractPageImpexGenerator" parent="abstractImpexGenerator" class="com.paulograbin.contentmigrator.impex.AbstractPageImpexGenerator" />
 
 	<alias name="defaultImpexSpitterFactory" alias="impexSpitterFactory"/>
 	<bean id="defaultImpexSpitterFactory" class="com.paulograbin.contentmigrator.impex.DefaultImpexSpitterFactory">
@@ -35,7 +36,10 @@
 		</property>
 		<property name="exportStrategiesMap">
 			<map key-type="java.lang.String" value-type="com.paulograbin.contentmigrator.impex.ImpexGenerator">
-				<entry key="ContentPage" value-ref="contentPageImpexGenerator"/>
+				<entry key="ContentPage" value-ref="abstractPageImpexGenerator"/>
+				<entry key="ProductPage" value-ref="abstractPageImpexGenerator"/>
+				<entry key="CategoryPage" value-ref="abstractPageImpexGenerator"/>
+				<entry key="CatalogPage" value-ref="abstractPageImpexGenerator"/>
 				<entry key="Category" value-ref="categoryImpexGenerator"/>
 				<entry key="Product" value-ref="productImpexGenerator"/>
 			</map>
