@@ -58,7 +58,7 @@ public class AbstractPageImpexGenerator extends AbstractImpexGenerator<AbstractP
     public Set<PK> makePkList(AbstractPageModel model) {
         Set<PK> pks = new HashSet<>();
 
-        LOG.info("Content page: " + model.getUid() + " - " + model.getPk());
+        LOG.info("Page: " + model.getUid() + " - " + model.getPk());
         pks.add(model.getPk());
 
         LOG.info("Template: " + model.getMasterTemplate().getUid() + " - " + model.getMasterTemplate().getPk());
