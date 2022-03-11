@@ -45,7 +45,7 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
             return Optional.of(hardCodedHeaderForItemType + "\n");
         }
 
-        LOG.info("Hardcoded header not found, will generated a new one for " + typeName);
+        LOG.info("Hardcoded header not found, will generate a new one for " + typeName);
         HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
         Set<ComposedType> composedTypes = new HashSet<>();
 
@@ -53,8 +53,10 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
         generator.setTypes(composedTypes);
         composedTypes.add(modelService.getSource(typeService.getComposedTypeForCode(typeName)));
 
-        String s = generator.generateScript();
-        return Optional.of(processHeaderGenerated(s));
+        String generatedHeader = generator.generateScript();
+        LOG.info("Generated header for " + typeName + ": " + generatedHeader);
+
+        return Optional.of(processHeaderGenerated(generatedHeader));
     }
 
     private Set<Language> getAvailableLanguages() {
