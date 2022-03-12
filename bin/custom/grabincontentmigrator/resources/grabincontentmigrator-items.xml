@@ -18,23 +18,24 @@
     </enumtypes>
 
     <itemtypes>
-        <itemtype code="ItemTypeImpexHeader">
-            <description>Change set</description>
-            <deployment table="ItemTypeImpexHeader" typecode="24341"/>
+        <itemtype code="HardCodedImpexHeader">
+<!--            ItemTypeImpexHeader-->
+            <description>Hard coded impex header used to export data on selected types</description>
+            <deployment table="HardCodedImpexHeader" typecode="24341"/>
             <attributes>
                 <attribute qualifier="typeCodeReference" type="java.lang.String">
-                    <description>TYPECODE for the item type</description>
+                    <description>_TYPECODE for the item type to be exported</description>
                     <modifiers unique="true" read="true" write="true" search="true" initial="false"/>
                     <persistence type="property"/>
                 </attribute>
                 <attribute qualifier="header" type="java.lang.String">
+                    <description>The custom impex header to be used</description>
                     <persistence type="property">
                         <columntype>
                             <value>HYBRIS.LONG_STRING</value>
                         </columntype>
                     </persistence>
                     <modifiers read="true" write="true" search="true" initial="false"/>
-                    <description>The custom impex header to be used</description>
                 </attribute>
             </attributes>
         </itemtype>
