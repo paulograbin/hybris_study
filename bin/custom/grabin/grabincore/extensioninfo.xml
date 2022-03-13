@@ -16,7 +16,7 @@
 			extensions which are automatically required -->
 		<requires-extension name="acceleratorcms"/>
 		<requires-extension name="solrserver"/>
-		<requires-extension name="grabincontentmigrator"/>
+		<requires-extension name="dataexporter"/>
 
 		<coremodule generated="true" manager="com.paulograbin.core.jalo.GrabinCoreManager" packageroot="com.paulograbin.core"/>
 

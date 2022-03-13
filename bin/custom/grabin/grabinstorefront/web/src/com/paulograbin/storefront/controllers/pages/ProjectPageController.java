@@ -10,7 +10,6 @@
  */
 package com.paulograbin.storefront.controllers.pages;
 
-import com.paulograbin.contentmigrator.impex.ImpexSpitterFactory;
 import com.paulograbin.facades.tew.ProjectData;
 import com.paulograbin.facades.tew.ProjectFacade;
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;

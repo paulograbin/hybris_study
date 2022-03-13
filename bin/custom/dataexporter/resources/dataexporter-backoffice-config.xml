@@ -2,12 +2,54 @@
 <!--
  Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved
 -->
-<config xmlns="http://www.hybris.com/cockpit/config">
+<config xmlns="http://www.hybris.com/cockpit/config"
+		xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" >
 
-	<!-- dataexporter UI configuration should be provided here -->
+	<context type="HardCodedImpexHeader" component="listview" merge-by="type">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column qualifier="typeCodeReference"/>
+			<list:column qualifier="header"/>
+		</list:list-view>
+	</context>
 
-	<!--<context component="component-code" module="dataexporter">-->
-		<!--Please check documentation for code snippets for specific components-->
-	<!--</context>-->
+	<context component="explorer-tree" merge-by="module" parent="auto" principal="admin,admingroup">
+		<n:explorer-tree xmlns:n="http://www.hybris.com/cockpitng/config/explorertree">
+			<n:navigation-node id="treenode_exporter" position="0">
+				<n:type-node id="typenode_HardCodedImpexHeader" code="HardCodedImpexHeader"/>
+				<n:navigation-node id="hmc_treenode_impex_dump_wizard"/>
+			</n:navigation-node>
+		</n:explorer-tree>
+	</context>
+
+	<context type="Item" component="listviewactions" module="platformbackoffice" merge-by="module">
+		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris" xmlns:as="http://www.hybris.com/cockpitng/config/advancedsearch" xmlns:cb="http://www.hybris.com/cockpitng/config/collectionbrowser" xmlns:cv="http://www.hybris.com/cockpitng/component/compareview" xmlns:df="http://www.hybris.com/cockpitng/component/dynamicForms" xmlns:dsb="http://www.hybris.com/cockpitng/config/dashboard" xmlns:ea="http://www.hybris.com/cockpitng/component/editorArea" xmlns:et="http://www.hybris.com/cockpitng/config/explorertree" xmlns:gv="http://www.hybris.com/cockpitng/component/gridView" xmlns:lv="http://www.hybris.com/cockpitng/component/listView" xmlns:na="http://www.hybris.com/cockpitng/config/notifications" xmlns:ss="http://www.hybris.com/cockpitng/config/simplesearch" xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" xmlns:yc="http://www.hybris.com/cockpitng/config/common">
+			<y:group position="30" qualifier="test" show-group-header="false">
+				<y:action action-id="com.kps.dataexporter.actions.ExportMultipleAction" id="exportMultipleAction" position="30" property="selectedObjects"/>
+			</y:group>
+		</y:actions>
+	</context>
+
+	<context type="hmc_treenode_impex_dump_wizard" component="create-wizard">
+		<wz:flow id="ImpexDumpWizard" title="impex.dump.title">
+			<wz:prepare id="impExDumpPrepare">
+				<wz:initialize property="impexDumpConfigurationForm"
+							   type="com.kps.dataexporter.widgets.impexdump.ImpexDumpConfigurationForm"/>
+			</wz:prepare>
+			<wz:step id="step1" label="impex.dump.prepare.label" sublabel="impex.dump.prepare.sublabel">
+				<wz:content id="step1.content">
+					<wz:property-list root="impexDumpConfigurationForm">
+						<wz:property qualifier="catalogVersionModel" type="Reference(CatalogVersion)" editor="com.hybris.cockpitng.editor.defaultreferenceeditor"/>
+						<wz:property qualifier="dataDumpExportType"
+									 type="java.lang.Enum(DataDumpExportType)"
+									 editor="com.hybris.cockpitng.editor.defaultenum"/>
+					</wz:property-list>
+				</wz:content>
+				<wz:navigation id="step1.navigation">
+					<wz:custom visible="impexDumpConfigurationForm.dataDumpExportType != null and impexDumpConfigurationForm.catalogVersionModel != null" handler="backofficeImpExDumpWizardHandler" label="Generate Dump"/>
+					<wz:cancel/>
+				</wz:navigation>
+			</wz:step>
+		</wz:flow>
+	</context>
 
 </config>
