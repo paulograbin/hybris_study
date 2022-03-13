@@ -1,0 +1,11 @@
+#Ant properties
+#Tue Feb 01 15:00:43 CET 2022
+version.api=2011
+vendor=hybris
+group.id=de.hybris.platform
+name=dataexporter
+description=dataexporter
+builddate=20220201 1456
+releasedate=20201119 1630
+version=2011.18
+module.name=platform-module
