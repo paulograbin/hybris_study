@@ -45,5 +45,7 @@
 	<alias name="defaultHardCodedHeaderService" alias="hardCodedHeaderService" />
 	<bean id="defaultHardCodedHeaderService" class="com.kps.dataexporter.service.impl.DefaultHardCodedHeaderService" />
 
+	<alias name="defaultHeaderLibraryGeneratorFactory" alias="headerLibraryGeneratorFactory" />
+	<bean id="defaultHeaderLibraryGeneratorFactory" class="com.kps.dataexporter.factory.impl.DefaultHeaderLibraryGeneratorFactory"/>
 
 </beans>

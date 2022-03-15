@@ -1,71 +1,45 @@
 package com.kps.dataexporter.impex.impl;
 
+import com.kps.dataexporter.factory.HeaderLibraryGeneratorFactory;
 import com.kps.dataexporter.impex.ImpexHeaderGenerationService;
 import com.kps.dataexporter.service.HardCodedHeaderService;
 import de.hybris.platform.impex.jalo.exp.generator.HeaderLibraryGenerator;
-import de.hybris.platform.jalo.c2l.Language;
-import de.hybris.platform.jalo.type.ComposedType;
-import de.hybris.platform.servicelayer.i18n.CommonI18NService;
-import de.hybris.platform.servicelayer.model.ModelService;
-import de.hybris.platform.servicelayer.type.TypeService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
 
 public class DefaultImpexHeaderGenerationService implements ImpexHeaderGenerationService {
 
     private static final Logger LOG = Logger.getLogger(DefaultImpexHeaderGenerationService.class);
 
-    private final ModelService modelService;
-    private final TypeService typeService;
-    private final CommonI18NService commonI18NService;
-
     @Resource
     private HardCodedHeaderService hardCodedHeaderService;
 
-
-    @Autowired
-    public DefaultImpexHeaderGenerationService(ModelService modelService, TypeService typeService, CommonI18NService commonI18NService) {
-        this.modelService = modelService;
-        this.typeService = typeService;
-        this.commonI18NService = commonI18NService;
-    }
+    @Resource
+    private HeaderLibraryGeneratorFactory headerLibraryGeneratorFactory;
 
     @Override
     public Optional<String> generateImpexHeaderForType(String typeName) {
-        String hardCodedHeaderForItemType = hardCodedHeaderService.findHardCodedHeaderForItemType(typeName);
+        checkArgument(isNotEmpty(typeName), "typeName cannot not be empty");
+
+        String hardCodedHeaderForItemType = getHardCodedHeaderService().findHardCodedHeaderForItemType(typeName);
         if (StringUtils.isNotBlank(hardCodedHeaderForItemType)) {
             LOG.info("Found hardcoded header for type " + typeName);
             return Optional.of(hardCodedHeaderForItemType + "\n");
         }
 
         LOG.info("Hardcoded header not found, will generate a new one for " + typeName);
-        HeaderLibraryGenerator generator = new HeaderLibraryGenerator();
-        Set<ComposedType> composedTypes = new HashSet<>();
-
-        generator.setLanguages(getAvailableLanguages());
-        generator.setTypes(composedTypes);
-        composedTypes.add(modelService.getSource(typeService.getComposedTypeForCode(typeName)));
-
+        HeaderLibraryGenerator generator = getHeaderLibraryGeneratorFactory().createHeaderLibraryGenerator(typeName);
         String generatedHeader = generator.generateScript();
         LOG.info("Generated header for " + typeName + ": " + generatedHeader);
 
         return Optional.of(processHeaderGenerated(generatedHeader));
-    }
-
-    private Set<Language> getAvailableLanguages() {
-        //TODO create property to control exported languages
-        return commonI18NService.getAllLanguages().stream()
-                .map(modelService::getSource)
-                .map(Language.class::cast)
-                .collect(Collectors.toSet());
     }
 
     private String processHeaderGenerated(String s) {
@@ -81,10 +55,11 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
                 .replace("[forceWrite = true]", "")
                 .replace("[forceWrite=true]", "")
                 .replace("velocityTemplate", "")
-                .replace("owner(&Item)[forceWrite=true];", "")
-                .replace("owner(&Item)[forceWrite=true]", "")
+                .replace("owner(&Item);", "")
+                .replace("owner(&Item)", "")
                 .replace("modifiedtime[dateformat=dd.MM.yyyy hh:mm:ss];", "")
-                .replace("creationtime[forceWrite=true,dateformat=dd.MM.yyyy hh:mm:ss];", "");
+                .replace("creationtime[forceWrite=true,dateformat=dd.MM.yyyy hh:mm:ss];", "")
+                .replace("&Item;", "");
     }
 
     private String appendImpexModifierToLineBeginning(final String stepOne) {
@@ -106,5 +81,21 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
                 "#  -------------------------------------------------------\n\n";
 
         return s.replace(flowerBox, "");
+    }
+
+    public HardCodedHeaderService getHardCodedHeaderService() {
+        return hardCodedHeaderService;
+    }
+
+    public void setHardCodedHeaderService(HardCodedHeaderService hardCodedHeaderService) {
+        this.hardCodedHeaderService = hardCodedHeaderService;
+    }
+
+    public HeaderLibraryGeneratorFactory getHeaderLibraryGeneratorFactory() {
+        return headerLibraryGeneratorFactory;
+    }
+
+    public void setHeaderLibraryGeneratorFactory(HeaderLibraryGeneratorFactory headerLibraryGeneratorFactory) {
+        this.headerLibraryGeneratorFactory = headerLibraryGeneratorFactory;
     }
 }

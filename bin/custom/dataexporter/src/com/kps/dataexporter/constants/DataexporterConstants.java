@@ -15,5 +15,10 @@ public final class DataexporterConstants extends GeneratedDataexporterConstants
 		//empty to avoid instantiating this constant class
 	}
 
-	// implement here constants used by this extension
+	public static final String IMPEX_EXPORT_FILTER_CLAUSE_USING_TYPE =
+			"\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} \"\" );\"";
+	public static final String IMPEX_EXPORT_FILTER_CLAUSE_USING_TYPE_AND_CATALOG_VERSION =
+			"\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} where {catalogVersion} = %2 \"\" );\"";
+
+
 }
