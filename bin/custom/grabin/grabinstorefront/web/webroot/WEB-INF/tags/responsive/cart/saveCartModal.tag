@@ -11,7 +11,7 @@
 <input type="hidden" id="localized_val" name="localized_val" value="${loc_val_html}"/>
 <div class="hidden">
 	<div id="saveCart" data-save-cart-title="<spring:theme code="${titleKey}"/>">
-		<form:form action="${actionUrl}" id="saveCartForm" commandName="saveCartForm" autocomplete="off">
+		<form:form action="${actionUrl}" id="saveCartForm" modelAttribute="saveCartForm" autocomplete="off">
 			<div class="form-group">
 				<c:if test="${not empty messageKey}">
 					<div class="legend"><spring:theme code="${messageKey}"/></div>
