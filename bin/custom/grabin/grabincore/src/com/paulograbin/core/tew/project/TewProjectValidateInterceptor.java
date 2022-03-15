@@ -14,6 +14,6 @@ public class TewProjectValidateInterceptor implements ValidateInterceptor<Projec
 
     @Override
     public void onValidate(ProjectModel projectModel, InterceptorContext interceptorContext) throws InterceptorException {
-//        LOG.info("On validate...");
+        LOG.info("On validate...");
     }
 }

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -43,13 +44,13 @@ public class ProjectPageController extends AbstractPageController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String productDetail(final Model model, final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException, UnsupportedEncodingException {
-        final List<ProjectData> projectModels = projectFacade.loadAll();
+        final List<ProjectData> projects = projectFacade.loadAll();
 
-        LOG.info(projectModels.size() + " projects found");
+        LOG.info(projects.size() + " projects found");
 
         ContentPageModel cmsPage = getCmsPageService().getPageForLabelOrId("projectPageGrabin");
         model.addAttribute(CMS_PAGE_MODEL, cmsPage);
-        model.addAttribute("projects", projectModels.subList(0, 10));
+        model.addAttribute("projects", projects.stream().limit(10).collect(Collectors.toList()));
 
 
 //        AbstractPageModel abstractPageModel = (AbstractPageModel) model.asMap().get(CMS_PAGE_MODEL);

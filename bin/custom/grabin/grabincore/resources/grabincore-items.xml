@@ -143,6 +143,11 @@
                         <defaultvalue>java.lang.Boolean.FALSE</defaultvalue>
                         <persistence type="property"/>
                     </attribute>
+
+                    <attribute qualifier="setByInterceptors" type="java.lang.String">
+                        <description>This attribute will be set by interceptors during load</description>
+                        <persistence type="property"/>
+                    </attribute>
                 </attributes>
                 <indexes>
                     <index name="projectName" unique="false">

@@ -180,7 +180,7 @@
                     <c:when test="${not entry.product.multidimensional}" >
                         <c:url value="/cart/update" var="cartUpdateFormAction" />
                         <c:set var="cartDataJson" value='{"cartCode" : "${ycommerce:encodeJSON(cartData.code)}","productPostPrice":"${ycommerce:encodeJSON(entry.basePrice.value)}","productName":"${ycommerce:encodeJSON(entry.product.name)}"}'></c:set>
-                        <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateFormAction}" method="post" commandName="updateQuantityForm${entry.entryNumber}"
+                        <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateFormAction}" method="post" modelAttribute="updateQuantityForm${entry.entryNumber}"
                                    class="js-qty-form${entry.entryNumber}"
                                     data-cart="${fn:escapeXml(cartDataJson)}">
                             <input type="hidden" name="entryNumber" value="${entryNumberHtml}"/>
@@ -194,7 +194,7 @@
                     </c:when>
                     <c:otherwise>
                         <c:url value="/cart/updateMultiD" var="cartUpdateMultiDFormAction" />
-                        <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateMultiDFormAction}" method="post" class="js-qty-form${entry.entryNumber}" commandName="updateQuantityForm${entry.entryNumber}">
+                        <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateMultiDFormAction}" method="post" class="js-qty-form${entry.entryNumber}" modelAttribute="updateQuantityForm${entry.entryNumber}">
                             <input type="hidden" name="entryNumber" value="${entryNumberHtml}"/>
                             <input type="hidden" name="productCode" value="${productCodeHtml}"/>
                             <input type="hidden" name="initialQuantity" value="${quantityHtml}"/>
@@ -301,7 +301,7 @@
                             <c:when test="${not entry.product.multidimensional}" >
                                 <c:url value="/cart/update" var="cartUpdateFormAction" />
                                 <c:set var="cartDataJson" value='{"cartCode" : "${ycommerce:encodeJSON(cartData.code)}","productPostPrice":"${ycommerce:encodeJSON(entry.basePrice.value)}","productName":"${ycommerce:encodeJSON(entry.product.name)}"}'/>
-                                <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateFormAction}" method="post" commandName="updateQuantityForm${entry.entryNumber}"
+                                <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateFormAction}" method="post" modelAttribute="updateQuantityForm${entry.entryNumber}"
                                            class="js-qty-form${entry.entryNumber}"
                                            data-cart="${fn:escapeXml(cartDataJson)}">
                                     <input type="hidden" name="entryNumber" value="${entryNumberHtml}"/>
@@ -315,7 +315,7 @@
                             </c:when>
                             <c:otherwise>
                                 <c:url value="/cart/updateMultiD" var="cartUpdateMultiDFormAction" />
-                                <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateMultiDFormAction}" method="post" class="js-qty-form${entry.entryNumber}" commandName="updateQuantityForm${entry.entryNumber}">
+                                <form:form id="updateCartForm${entry.entryNumber}" action="${cartUpdateMultiDFormAction}" method="post" class="js-qty-form${entry.entryNumber}" modelAttribute="updateQuantityForm${entry.entryNumber}">
                                     <input type="hidden" name="entryNumber" value="${entryNumberHtml}"/>
                                     <input type="hidden" name="productCode" value="${productCodeHtml}"/>
                                     <input type="hidden" name="initialQuantity" value="${quantityHtml}"/>
