@@ -14,6 +14,6 @@ public class TewProjectPrepareInterceptor implements PrepareInterceptor<ProjectM
 
     @Override
     public void onPrepare(ProjectModel projectModel, InterceptorContext interceptorContext) throws InterceptorException {
-//        LOG.info("On prepare...");
+        LOG.info("On prepare...");
     }
 }
