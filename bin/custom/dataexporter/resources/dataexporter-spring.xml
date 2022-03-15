@@ -22,9 +22,10 @@
 	<bean id="productImpexGenerator" parent="abstractImpexGenerator" class="com.kps.dataexporter.impex.impl.ProductImpexGenerator" />
 	<bean id="abstractPageImpexGenerator" parent="abstractImpexGenerator" class="com.kps.dataexporter.impex.impl.AbstractPageImpexGenerator" />
 
-	<alias name="defaultImpexSpitterFactory" alias="impexSpitterFactory"/>
-	<bean id="defaultImpexSpitterFactory" class="com.kps.dataexporter.impex.impl.DefaultImpexSpitterFactory">
+	<alias name="defaultDataExportImpexGeneratorService" alias="dataExportImpexGeneratorService"/>
+	<bean id="defaultDataExportImpexGeneratorService" class="com.kps.dataexporter.impex.impl.DefaultDataExportImpexGeneratorService">
 		<property name="exportService" ref="exportService" />
+		<property name="exportConfigFactory" ref="exportConfigFactory"/>
 		<property name="dumpExportStrategiesMap">
 			<map key-type="com.kps.dataexporter.enums.DataDumpExportType" value-type="com.kps.dataexporter.impex.DumpImpexGenerator">
 				<entry key="PRODUCT" value-ref="productDumpImpexGenerator"/>
@@ -47,5 +48,8 @@
 
 	<alias name="defaultHeaderLibraryGeneratorFactory" alias="headerLibraryGeneratorFactory" />
 	<bean id="defaultHeaderLibraryGeneratorFactory" class="com.kps.dataexporter.factory.impl.DefaultHeaderLibraryGeneratorFactory"/>
+
+	<alias name="defaultExportConfigFactory" alias="exportConfigFactory" />
+	<bean id="defaultExportConfigFactory" class="com.kps.dataexporter.factory.impl.DefaultExportConfigFactory" />
 
 </beans>

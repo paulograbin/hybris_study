@@ -5,7 +5,7 @@ import com.hybris.cockpitng.widgets.configurableflow.FlowActionHandler;
 import com.hybris.cockpitng.widgets.configurableflow.FlowActionHandlerAdapter;
 import com.kps.dataexporter.actions.FileDownloadHelper;
 import com.kps.dataexporter.enums.DataDumpExportType;
-import com.kps.dataexporter.impex.impl.DefaultImpexSpitterFactory;
+import com.kps.dataexporter.impex.impl.DefaultDataExportImpexGeneratorService;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.media.MediaService;
@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class ImpExDumpWizardHandler implements FlowActionHandler {
 
-    @Resource(name = "impexSpitterFactory")
-    private DefaultImpexSpitterFactory impexSpitterFactory;
+    @Resource(name = "dataExportImpexGeneratorService")
+    private DefaultDataExportImpexGeneratorService dataExportImpexGeneratorService;
 
     @Resource(name = "mediaService")
     private MediaService mediaService;
@@ -26,7 +26,7 @@ public class ImpExDumpWizardHandler implements FlowActionHandler {
         CatalogVersionModel catalogVersion = adapter.getWidgetInstanceManager().getModel().getValue("impexDumpConfigurationForm.catalogVersionModel", CatalogVersionModel.class);
         DataDumpExportType dumpType = adapter.getWidgetInstanceManager().getModel().getValue("impexDumpConfigurationForm.dataDumpExportType", DataDumpExportType.class);
 
-        ExportResult result = impexSpitterFactory.exportDataDump(dumpType, catalogVersion);
+        ExportResult result = dataExportImpexGeneratorService.exportDataDump(dumpType, catalogVersion);
         FileDownloadHelper.executeMediaDownload(mediaService, result.getExportedData());
     }
 }

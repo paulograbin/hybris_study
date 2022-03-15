@@ -7,9 +7,7 @@ import de.hybris.platform.servicelayer.impex.ExportResult;
 
 import java.util.Set;
 
-public interface ImpexSpitterFactory {
-
-    ExportResult export(ItemModel item);
+public interface DataExportImpexGeneratorService {
 
     ExportResult exportMultiple(Set<ItemModel> items);
 

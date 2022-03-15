@@ -3,7 +3,7 @@ package com.kps.dataexporter.actions;
 import com.hybris.cockpitng.actions.ActionContext;
 import com.hybris.cockpitng.actions.ActionResult;
 import com.hybris.cockpitng.actions.CockpitAction;
-import com.kps.dataexporter.impex.impl.DefaultImpexSpitterFactory;
+import com.kps.dataexporter.impex.impl.DefaultDataExportImpexGeneratorService;
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.media.MediaService;
@@ -19,8 +19,8 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
 
     private static final String CONFIRMATION_MESSAGE = "hmc.action.confirmpickup.confirmation.message";
 
-    @Resource(name = "impexSpitterFactory")
-    private DefaultImpexSpitterFactory impexSpitterFactory;
+    @Resource(name = "dataExportImpexGeneratorService")
+    private DefaultDataExportImpexGeneratorService dataExportImpexGeneratorService;
 
     @Resource(name = "mediaService")
     private MediaService mediaService;
@@ -43,7 +43,7 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
                 return false;
             }
 
-            boolean b = impexSpitterFactory.checkTypeSupported((ItemModel) next);
+            boolean b = dataExportImpexGeneratorService.checkTypeSupported((ItemModel) next);
 
             LOG.info("Can perform? " + b + " (" + data.size() + ")");
 
@@ -57,7 +57,7 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
 
             LinkedHashSet dataToExport = ctx.getData();
             LOG.info("Data to export " + dataToExport.size());
-            if (!impexSpitterFactory.checkTypeSupported((ItemModel) dataToExport.iterator().next())) {
+            if (!dataExportImpexGeneratorService.checkTypeSupported((ItemModel) dataToExport.iterator().next())) {
                 Messagebox.show("The item type you selected to export does not have an impex generator implemented yet", "title", null, org.zkoss.zul.Messagebox.ERROR, null);
 
                 return new ActionResult(ActionResult.ERROR);
@@ -66,16 +66,8 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
             if (dataToExport.isEmpty()) {
                 Messagebox.show("To use the export feature you must select at least one in the list below", "title", null, org.zkoss.zul.Messagebox.EXCLAMATION, null);
             } else {
-                ExportResult result = null;
-
-                if (dataToExport.size() == 1) {
-                    LOG.info("Exporting single model...");
-                    result = impexSpitterFactory.export((ItemModel) dataToExport.iterator().next());
-
-                } else {
-                    LOG.info("Exporting several models...");
-                    result = impexSpitterFactory.exportMultiple(dataToExport);
-                }
+                LOG.info("Exporting models...");
+                ExportResult result = dataExportImpexGeneratorService.exportMultiple(dataToExport);
 
                 FileDownloadHelper.executeMediaDownload(mediaService, result.getExportedData());
             }
