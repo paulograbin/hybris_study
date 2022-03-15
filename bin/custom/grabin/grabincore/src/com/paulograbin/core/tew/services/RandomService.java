@@ -5,4 +5,6 @@ public interface RandomService {
     Integer getRandomNumber();
 
     Integer getRandomNumber(int upperLimit);
+
+    String makeRandomString();
 }
