@@ -1,9 +1,9 @@
 package com.paulograbin.core.tew.services;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class DefaultRandomService implements RandomService {
@@ -22,5 +22,11 @@ public class DefaultRandomService implements RandomService {
         LOG.info("Returning random number limited at " + upperLimit);
 
         return new Random().nextInt(upperLimit);
+    }
+
+
+    @Override
+    public String makeRandomString() {
+        return RandomStringUtils.randomAlphabetic(10);
     }
 }
