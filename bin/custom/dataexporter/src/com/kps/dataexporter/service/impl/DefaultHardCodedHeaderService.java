@@ -16,11 +16,10 @@ public class DefaultHardCodedHeaderService implements HardCodedHeaderService {
 
     @Override
     public String findHardCodedHeaderForItemType(String typecode) {
-        final HardCodedImpexHeaderModel hardCodedImpexHeader = new HardCodedImpexHeaderModel();
-        hardCodedImpexHeader.setTypeCodeReference(typecode);
+        final HardCodedImpexHeaderModel hardCodedImpexHeader = createExampleModel(typecode);
 
         try {
-            HardCodedImpexHeaderModel modelByExample = flexibleSearchService.getModelByExample(hardCodedImpexHeader);
+            HardCodedImpexHeaderModel modelByExample = getFlexibleSearchService().getModelByExample(hardCodedImpexHeader);
             if (modelByExample != null) {
                 return modelByExample.getHeader();
             }
@@ -29,5 +28,19 @@ public class DefaultHardCodedHeaderService implements HardCodedHeaderService {
         }
 
         return StringUtils.EMPTY;
+    }
+
+    protected HardCodedImpexHeaderModel createExampleModel(String typecode) {
+        final HardCodedImpexHeaderModel hardCodedImpexHeader = new HardCodedImpexHeaderModel();
+        hardCodedImpexHeader.setTypeCodeReference(typecode);
+        return hardCodedImpexHeader;
+    }
+
+    public FlexibleSearchService getFlexibleSearchService() {
+        return flexibleSearchService;
+    }
+
+    public void setFlexibleSearchService(FlexibleSearchService flexibleSearchService) {
+        this.flexibleSearchService = flexibleSearchService;
     }
 }
