@@ -63,7 +63,7 @@
         </enumtype>
     </enumtypes>
 
-    
+
     <relations>
         <relation code="Project2RepositoryRelation" localized="false">
             <sourceElement type="Project" qualifier="project" cardinality="one"/>
@@ -72,11 +72,31 @@
             </targetElement>
         </relation>
     </relations>
-    
-    
+
+
     <itemtypes>
         <!-- Add your item definitions here -->
         <typegroup name="grabin">
+
+            <itemtype code="Product" autocreate="false" generate="false">
+                <description>Product extension created for testing some of pentland requirements</description>
+                <attributes>
+                    <attribute qualifier="pentlandString" type="java.lang.String">
+                        <description>Test with string attribute</description>
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="pentlandInteger" type="java.lang.Integer">
+                        <description>Test with integer attribute</description>
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="pentlanBoolean" type="java.lang.Boolean">
+                        <description>Test with integer attribute</description>
+                        <defaultvalue>Boolean.FALSE</defaultvalue>
+                        <persistence type="property"/>
+                    </attribute>
+                </attributes>
+            </itemtype>
+
 
             <itemtype code="GrabinProcess" autocreate="true" generate="true"
                       jaloclass="de.hybris.platform.orderprocessing.jalo.GrabinProcess"
