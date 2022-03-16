@@ -25,7 +25,7 @@
 <requires-extension name="commerceorgsamplesaddon"/>
 <requires-extension name="acceleratorstorefrontcommons"/>
 		<requires-extension name="grabinfacades"/>
-		<requires-extension name="grabincontentmigrator"/>
+		<requires-extension name="dataexporter"/>
 
 		<webmodule jspcompile="false" webroot="/grabinstorefront"/>
 

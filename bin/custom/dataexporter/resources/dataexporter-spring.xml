@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<alias name="defaultImpexHeaderGenerationService" alias="impexHeaderGenerationService"/>
+	<bean id="defaultImpexHeaderGenerationService" class="com.kps.dataexporter.impex.impl.DefaultImpexHeaderGenerationService"/>
+
+	<bean id="contentDumpImpexGenerator" class="com.kps.dataexporter.impex.impl.ContentDumpImpexGenerator" />
+	<bean id="productDumpImpexGenerator" class="com.kps.dataexporter.impex.impl.ProductDumpImpexGenerator" />
+
+	<bean id="abstractImpexGenerator" class="com.kps.dataexporter.impex.impl.AbstractImpexGenerator" abstract="true" >
+		<property name="impexHeaderGenerationService" ref="impexHeaderGenerationService" />
+	</bean>
+
+	<bean id="contentPageImpexGenerator" parent="abstractImpexGenerator" class="com.kps.dataexporter.impex.impl.ContentPageImpexGenerator" />
+	<bean id="productImpexGenerator" parent="abstractImpexGenerator" class="com.kps.dataexporter.impex.impl.ProductImpexGenerator" />
+	<bean id="abstractPageImpexGenerator" parent="abstractImpexGenerator" class="com.kps.dataexporter.impex.impl.AbstractPageImpexGenerator" />
+
+	<alias name="defaultDataExportImpexGeneratorService" alias="dataExportImpexGeneratorService"/>
+	<bean id="defaultDataExportImpexGeneratorService" class="com.kps.dataexporter.impex.impl.DefaultDataExportImpexGeneratorService">
+		<property name="exportService" ref="exportService" />
+		<property name="exportConfigFactory" ref="exportConfigFactory"/>
+		<property name="dumpExportStrategiesMap">
+			<map key-type="com.kps.dataexporter.enums.DataDumpExportType" value-type="com.kps.dataexporter.impex.DumpImpexGenerator">
+				<entry key="PRODUCT" value-ref="productDumpImpexGenerator"/>
+				<entry key="CONTENT" value-ref="contentDumpImpexGenerator"/>
+			</map>
+		</property>
+		<property name="exportStrategiesMap">
+			<map key-type="java.lang.String" value-type="com.kps.dataexporter.impex.ImpexGenerator">
+				<entry key="ContentPage" value-ref="abstractPageImpexGenerator"/>
+				<entry key="ProductPage" value-ref="abstractPageImpexGenerator"/>
+				<entry key="CategoryPage" value-ref="abstractPageImpexGenerator"/>
+				<entry key="CatalogPage" value-ref="abstractPageImpexGenerator"/>
+				<entry key="Product" value-ref="productImpexGenerator"/>
+			</map>
+		</property>
+	</bean>
+
+	<alias name="defaultHardCodedHeaderService" alias="hardCodedHeaderService" />
+	<bean id="defaultHardCodedHeaderService" class="com.kps.dataexporter.service.impl.DefaultHardCodedHeaderService" />
+
+	<alias name="defaultHeaderLibraryGeneratorFactory" alias="headerLibraryGeneratorFactory" />
+	<bean id="defaultHeaderLibraryGeneratorFactory" class="com.kps.dataexporter.factory.impl.DefaultHeaderLibraryGeneratorFactory"/>
+
+	<alias name="defaultExportConfigFactory" alias="exportConfigFactory" />
+	<bean id="defaultExportConfigFactory" class="com.kps.dataexporter.factory.impl.DefaultExportConfigFactory" />
+
+</beans>

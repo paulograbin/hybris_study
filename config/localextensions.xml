@@ -59,7 +59,7 @@
 <!--    <extension name='kymaintegrationsampledata' />-->
     <extension name="grabinfulfilmentprocess"/>
     <extension name="grabincore"/>
-    <extension name="grabincontentmigrator"/>
+<!--    <extension name="grabincontentmigrator"/>-->
     <extension name="grabinfacades"/>
     <extension name="grabintest"/>
     <extension name="grabininitialdata"/>
@@ -73,5 +73,8 @@
 
     <extension name='solrfacetsearchbackoffice' />
     <extension name='solrserver' />
+
+    <extension name="dataexporter" />
+
   </extensions>
 </hybrisconfig>
