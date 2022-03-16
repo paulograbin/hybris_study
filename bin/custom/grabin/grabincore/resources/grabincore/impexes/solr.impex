@@ -1,3 +1,17 @@
+# SOLR ELECTRONICS PRODOCT
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]; backofficeDisplayName ; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; useForSpellchecking[default = false]; useForAutocomplete[default = false]; fieldValueProvider    ; valueProviderParameter;
+                                 ; electronicsProductType                    ; pentlanBoolean     ; Pentland test Boolean ; boolean   ;                   ;                          ; false                     ;                            ;                                     ;                                    ;                       ;                       ;
+                                 ; electronicsProductType                    ; pentlandString     ; Pentland test String  ; string    ;                   ;                          ; false                     ;                            ; true                                ; true                               ; springELValueProvider ;                       ;
+                                 ; electronicsProductType                    ; pentlandInteger    ; Pentland test Integer ; int       ;                   ;                          ; false                     ;                            ;                                     ;                                    ;                       ;                       ;
+
+
+
+
+
+
+
+
+
 INSERT_UPDATE SolrIndexedType; identifier[unique = true]; type(code); variant; identityProvider
                              ; GrabinProject            ; Project   ; false  ; grabinProjectIdentityProvider
 
@@ -10,13 +24,13 @@ INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; iden
                               ; GrabinProject                             ; grabinProjectDeleteQuery ; delete    ; SELECT {pk} FROM {Project}                                        ; true                                ;                                  ;                                  ; admin    ;                                 ;
 
 
-$facetSearchConfigName=electronicsIndex
+$facetSearchConfigName = electronicsIndex
 # Language
-$lang=en
-$contentCatalogName=electronicsContentCatalog
-$contentCatalogVersion=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalogName]),CatalogVersion.version[default=Staged])[default=$contentCatalogName:Staged]
-$productCatalog=electronicsProductCatalog
-$productCatalogVersion=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$productCatalog]),CatalogVersion.version[default=Staged])[default=$productCatalog:Staged]
+$lang = en
+$contentCatalogName = electronicsContentCatalog
+$contentCatalogVersion = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalogName]), CatalogVersion.version[default=Staged])[default=$contentCatalogName:Staged]
+$productCatalog = electronicsProductCatalog
+$productCatalogVersion = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$productCatalog]), CatalogVersion.version[default=Staged])[default=$productCatalog:Staged]
 
 
 # Keyword Redirects (Must use INSERT_UPDATE here)
@@ -43,12 +57,6 @@ INSERT_UPDATE SolrCategoryRedirect; redirectItem(code, $productCatalogVersion)[u
                                   ; brand_5                                                  ; $productCatalog-redirectRefID-sony
                                   ; brand_10                                                 ; $productCatalog-redirectRefID-canon
                                   ; 902                                                      ; $productCatalog-redirectRefID-memory
-
-
-
-
-
-
 
 
 
