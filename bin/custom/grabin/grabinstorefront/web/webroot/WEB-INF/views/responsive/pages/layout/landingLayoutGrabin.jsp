@@ -10,10 +10,10 @@
 
     bbbb
 
-    <div id="section1" class="Section1 container">
-    <cms:pageSlot position="Section1" var="feature" class="Section1">
-        <cms:component component="${feature}" />
-    </cms:pageSlot>
+    <div id="section1" class="container">
+        <cms:pageSlot position="Section1" var="feature" class="Section1">
+            <cms:component component="${feature}"/>
+        </cms:pageSlot>
     </div>
 
     ccc
