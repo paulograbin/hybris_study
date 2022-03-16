@@ -46,7 +46,7 @@
 					<div class="quote-discount__modal">
 						<form:form id="quoteDiscountForm"
 							action="${quoteDiscountApplyAction}" method="post"
-							commandName="quoteDiscountForm">
+							modelAttribute="quoteDiscountForm">
 							<div class="row">
 								<div class="col-xs-6 col-sm-7">
 									<label class="quote-discount__modal--label text-left"> <spring:theme code="text.quote.discount.by.percentage" /></label>

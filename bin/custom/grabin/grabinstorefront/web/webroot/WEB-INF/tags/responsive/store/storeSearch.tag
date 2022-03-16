@@ -17,7 +17,7 @@
 		<div class="store__finder--search">
 			<div class="row">
 				<div class="col-sm-6">
-					<form:form action="${storeFinderFormAction}" method="get" commandName="storeFinderForm">
+					<form:form action="${storeFinderFormAction}" method="get" modelAttribute="storeFinderForm">
 						<ycommerce:testId code="storeFinder_search_box">
 							<div class="input-group">
 								<formElement:formInputBox idKey="storelocator-query" labelKey="storelocator.query" path="q" labelCSS="sr-only" inputCSS="form-control js-store-finder-search-input" mandatory="true"  placeholder="pickup.search.message" />
