@@ -37,6 +37,11 @@
                     <modifiers read="true" write="true" search="true" initial="false"/>
                 </attribute>
             </attributes>
+            <indexes>
+                <index name="TypeCodeReferenceIDX">
+                    <key attribute="typeCodeReference"/>
+                </index>
+            </indexes>
         </itemtype>
     </itemtypes>
 </items>

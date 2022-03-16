@@ -19,6 +19,7 @@ public final class DataexporterConstants extends GeneratedDataexporterConstants
 			"\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} \"\" );\"";
 	public static final String IMPEX_EXPORT_FILTER_CLAUSE_USING_TYPE_AND_CATALOG_VERSION =
 			"\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} where {catalogVersion} = %2 \"\" );\"";
-
+	public static final String IMPEX_EXPORT_FILTER_CLAUSE_USING_TYPE_AND_PK_LIST =
+			"\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} where {pk} in ('%2') \"\" );\"";
 
 }
