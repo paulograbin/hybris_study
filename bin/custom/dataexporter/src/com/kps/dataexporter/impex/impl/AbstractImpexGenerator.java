@@ -5,6 +5,7 @@ import com.kps.dataexporter.impex.ImpexHeaderGenerationService;
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.ItemModel;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Collections;
@@ -12,13 +13,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.kps.dataexporter.constants.DataexporterConstants.IMPEX_EXPORT_FILTER_CLAUSE_USING_TYPE_AND_PK_LIST;
+
 
 public abstract class AbstractImpexGenerator<T extends ItemModel> implements ImpexGenerator<T> {
 
     private static final Logger LOG = Logger.getLogger(AbstractImpexGenerator.class);
 
     private static final String LINE_BREAK_CHAR = "\n";
-    private static final String WHERE_CLAUSE = "\"#% impex.exportItemsFlexibleSearch( \"\"select {pk} from {%1!} where {pk} in ('%2') \"\" );\"";
 
     private ImpexHeaderGenerationService impexHeaderGenerationService;
 
@@ -28,18 +30,21 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
         List<String> typeList = makeTypeToExportList();
         Set<PK> pksForType = makePkList(model);
 
-        StringBuilder sb = new StringBuilder();
-
-        for (String currentType : typeList) {
-            if (CollectionUtils.isNotEmpty(pksForType)) {
-                String generatedHeader = impexHeaderGenerationService.generateImpexHeaderForType(currentType).orElseThrow(IllegalStateException::new);
-                String whereClause = makeWhereClause(currentType, pksForType);
-                sb.append(generatedHeader).append(whereClause);
-            }
+        if (CollectionUtils.isEmpty(pksForType)) {
+            return StringUtils.EMPTY;
         }
 
-        LOG.info(sb.toString());
-        return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        for (String currentType : typeList) {
+            String generatedHeader = getImpexHeaderGenerationService().generateImpexHeaderForType(currentType)
+                    .orElseThrow(IllegalStateException::new);
+            String whereClause = makeWhereClause(currentType, pksForType);
+            sb.append(generatedHeader).append(whereClause);
+        }
+
+        String result = sb.toString();
+        LOG.info(result);
+        return result;
     }
 
     @Override
@@ -62,7 +67,8 @@ public abstract class AbstractImpexGenerator<T extends ItemModel> implements Imp
                 .map(PK::toString)
                 .collect(Collectors.joining("','"));
 
-        return WHERE_CLAUSE.replace("%1", typeCode).replace("%2", pks).concat(LINE_BREAK_CHAR);
+        return IMPEX_EXPORT_FILTER_CLAUSE_USING_TYPE_AND_PK_LIST
+                .replace("%1", typeCode).replace("%2", pks).concat(LINE_BREAK_CHAR);
     }
 
     public abstract Set<PK> makePkList(T model);

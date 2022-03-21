@@ -35,7 +35,6 @@ public class DefaultHeaderLibraryGeneratorFactory implements HeaderLibraryGenera
     }
 
     private Set<Language> getAvailableLanguages() {
-        //TODO create property to control exported languages
         return commonI18NService.getAllLanguages().stream()
                 .map(modelService::getSource)
                 .map(Language.class::cast)

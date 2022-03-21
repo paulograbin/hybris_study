@@ -8,7 +8,6 @@ import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.servicelayer.impex.ExportResult;
 import de.hybris.platform.servicelayer.media.MediaService;
 import org.apache.log4j.Logger;
-import org.zkoss.zhtml.Messagebox;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashSet;
@@ -17,38 +16,27 @@ import java.util.LinkedHashSet;
 public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, String> {
     private static final Logger LOG = Logger.getLogger(ExportMultipleAction.class);
 
-    private static final String CONFIRMATION_MESSAGE = "hmc.action.confirmpickup.confirmation.message";
-
-    @Resource(name = "dataExportImpexGeneratorService")
+    @Resource
     private DefaultDataExportImpexGeneratorService dataExportImpexGeneratorService;
 
-    @Resource(name = "mediaService")
+    @Resource
     private MediaService mediaService;
-
 
     @Override
     public boolean canPerform(final ActionContext<LinkedHashSet<?>> ctx) {
-        if (ctx.getData() == null) {
+        if (ctx.getData() == null || ctx.getData().isEmpty()) {
             return false;
         }
 
         LinkedHashSet<?> data = ctx.getData();
-
-        if (data.isEmpty()) {
+        Object first = data.iterator().next();
+        if (!(first instanceof ItemModel)) {
             return false;
-        } else {
-
-            Object next = data.iterator().next();
-            if (!(next instanceof ItemModel)) {
-                return false;
-            }
-
-            boolean b = dataExportImpexGeneratorService.checkTypeSupported((ItemModel) next);
-
-            LOG.info("Can perform? " + b + " (" + data.size() + ")");
-
-            return b;
         }
+
+        boolean isTypeSupported = dataExportImpexGeneratorService.checkTypeSupported((ItemModel) first);
+        LOG.debug("Can perform? " + isTypeSupported + " (" + data.size() + ")");
+        return isTypeSupported;
     }
 
     @Override
@@ -56,41 +44,19 @@ public class ExportMultipleAction implements CockpitAction<LinkedHashSet<?>, Str
         if (ctx != null) {
 
             LinkedHashSet dataToExport = ctx.getData();
-            LOG.info("Data to export " + dataToExport.size());
-            if (!dataExportImpexGeneratorService.checkTypeSupported((ItemModel) dataToExport.iterator().next())) {
-                Messagebox.show("The item type you selected to export does not have an impex generator implemented yet", "title", null, org.zkoss.zul.Messagebox.ERROR, null);
+            LOG.debug("Data to export " + dataToExport.size());
 
-                return new ActionResult(ActionResult.ERROR);
-            }
+            ExportResult result = dataExportImpexGeneratorService.exportMultiple(dataToExport);
+            FileDownloadHelper.executeMediaDownload(mediaService, result.getExportedData());
 
-            if (dataToExport.isEmpty()) {
-                Messagebox.show("To use the export feature you must select at least one in the list below", "title", null, org.zkoss.zul.Messagebox.EXCLAMATION, null);
-            } else {
-                LOG.info("Exporting models...");
-                ExportResult result = dataExportImpexGeneratorService.exportMultiple(dataToExport);
-
-                FileDownloadHelper.executeMediaDownload(mediaService, result.getExportedData());
-            }
-
-//            todo: work on the return type
             return new ActionResult(ActionResult.SUCCESS);
-
-        } else {
-            return new ActionResult(ActionResult.ERROR);
         }
+
+        return new ActionResult(ActionResult.ERROR);
     }
 
     @Override
     public boolean needsConfirmation(ActionContext<LinkedHashSet<?>> ctx) {
         return false;
-    }
-
-    @Override
-    public String getConfirmationMessage(ActionContext<LinkedHashSet<?>> ctx) {
-        LOG.info("getConfirmationMessage...");
-
-
-        // todo check when this method gets called
-        return ctx.getLabel(CONFIRMATION_MESSAGE);
     }
 }
