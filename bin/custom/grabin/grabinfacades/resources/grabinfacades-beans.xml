@@ -33,4 +33,12 @@
 		<property name="mostPurchasedProducts" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
 	</bean>
 
+	<bean class="de.hybris.platform.commercefacades.product.data.ProductData">
+		<property name="test" type="String"/>
+		<property name="pentlandString" type="String"/>
+		<property name="pentlandInteger" type="String"/>
+		<property name="pentlanBoolean" type="String"/>
+		<property name="pentlandBoolean" type="String"/>
+	</bean>
+
 </beans>

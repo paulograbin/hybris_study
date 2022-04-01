@@ -226,7 +226,14 @@
 
 
 
+    <bean id="grabinProductPopulator" class="com.paulograbin.facades.populators.GrabinProductPopulator">
+    </bean>
 
+    <!-- Add the grabin product converter to the productConverter -->
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="productConverter"/>
+        <property name="add" ref="grabinProductPopulator"/>
+    </bean>
 
 
 

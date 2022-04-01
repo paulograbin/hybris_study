@@ -25,6 +25,11 @@
 							<product:productPricePanel product="${product}" />
 						</ycommerce:testId>
 						<div class="description">${ycommerce:sanitizeHTML(product.summary)}</div>
+						<div class="description">Description ${ycommerce:sanitizeHTML(product.summary)}</div>
+						<div class="description">String ${ycommerce:sanitizeHTML(product.pentlandString)}</div>
+						<div class="description">Integer ${ycommerce:sanitizeHTML(product.pentlandInteger)}</div>
+						<div class="description">Boolean 1 ${ycommerce:sanitizeHTML(product.pentlanBoolean)}</div>
+						<div class="description">Boolean 2 ${ycommerce:sanitizeHTML(product.pentlandBoolean)}</div>
 					</div>
 				</div>
 
