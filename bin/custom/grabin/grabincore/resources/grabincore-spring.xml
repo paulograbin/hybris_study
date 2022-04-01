@@ -47,6 +47,11 @@
 	<bean id="tewProjectRemoveInterceptor" class="com.paulograbin.core.tew.project.TewProjectRemoveInterceptor"/>
 	<bean id="tewProjectValidateInterceptor" class="com.paulograbin.core.tew.project.TewProjectValidateInterceptor"/>
 
+	<bean id="grabinProductLoadInterceptor" class="com.paulograbin.core.product.GrabinProductLoadInterceptor"/>
+	<bean id="grabinProductLoadMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="grabinProductLoadInterceptor"/>
+		<property name="typeCode" value="Product"/>
+	</bean>
 
 	<alias name="defaultProjectDao" alias="projectDao"/>
 	<bean name="defaultProjectDao" class="com.paulograbin.core.tew.dao.DefaultProjectDao"/>
