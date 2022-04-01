@@ -29,4 +29,9 @@ public class DefaultRandomService implements RandomService {
     public String makeRandomString() {
         return RandomStringUtils.randomAlphabetic(10);
     }
+
+    @Override
+    public boolean randomBoolean() {
+        return new Random().nextBoolean();
+    }
 }
