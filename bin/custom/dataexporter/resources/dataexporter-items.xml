@@ -14,6 +14,7 @@
             <description>Type of data to export in the Data Dump Tool</description>
             <value code="PRODUCT"/>
             <value code="CONTENT"/>
+            <value code="SOLR"/>
         </enumtype>
     </enumtypes>
 
