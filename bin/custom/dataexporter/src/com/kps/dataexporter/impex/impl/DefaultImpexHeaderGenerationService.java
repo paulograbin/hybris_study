@@ -31,7 +31,8 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
         String hardCodedHeaderForItemType = getHardCodedHeaderService().findHardCodedHeaderForItemType(typeName);
         if (StringUtils.isNotBlank(hardCodedHeaderForItemType)) {
             LOG.info("Found hardcoded header for type " + typeName);
-            return Optional.of(hardCodedHeaderForItemType + "\n");
+            LOG.info(hardCodedHeaderForItemType);
+            return Optional.of(removeColumns(hardCodedHeaderForItemType) + "\n");
         }
 
         LOG.info("Hardcoded header not found, will generate a new one for " + typeName);
