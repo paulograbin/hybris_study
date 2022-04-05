@@ -13,6 +13,7 @@
 
 	<bean id="contentDumpImpexGenerator" class="com.kps.dataexporter.impex.impl.ContentDumpImpexGenerator" />
 	<bean id="productDumpImpexGenerator" class="com.kps.dataexporter.impex.impl.ProductDumpImpexGenerator" />
+	<bean id="solrDumpImpexGenerator" class="com.kps.dataexporter.impex.impl.SolrDumpImpexGenerator" />
 
 	<bean id="abstractImpexGenerator" class="com.kps.dataexporter.impex.impl.AbstractImpexGenerator" abstract="true" >
 		<property name="impexHeaderGenerationService" ref="impexHeaderGenerationService" />
@@ -30,6 +31,7 @@
 			<map key-type="com.kps.dataexporter.enums.DataDumpExportType" value-type="com.kps.dataexporter.impex.DumpImpexGenerator">
 				<entry key="PRODUCT" value-ref="productDumpImpexGenerator"/>
 				<entry key="CONTENT" value-ref="contentDumpImpexGenerator"/>
+				<entry key="SOLR" value-ref="solrDumpImpexGenerator"/>
 			</map>
 		</property>
 		<property name="exportStrategiesMap">
