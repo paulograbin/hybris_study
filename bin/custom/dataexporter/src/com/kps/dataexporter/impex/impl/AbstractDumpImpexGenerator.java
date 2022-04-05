@@ -19,6 +19,15 @@ public abstract class AbstractDumpImpexGenerator implements DumpImpexGenerator {
     @Override
     public abstract String generateDump(CatalogVersionModel catalogVersionModel);
 
+    protected String generateImpex(String typecode) {
+        checkArgument(isNotEmpty(typecode), "typecode cannot not be empty");
+
+        StringBuilder builder = new StringBuilder();
+        String generatedHeader = getImpexHeaderGenerationService().generateImpexHeaderForType(typecode).orElseThrow(IllegalStateException::new);
+        builder.append(generatedHeader).append(makeWhereClause(typecode));
+        return builder.toString();
+    }
+
     protected String generateImpex(String typecode, String whereClause) {
         checkArgument(isNotEmpty(typecode), "typecode cannot not be empty");
         checkArgument(isNotEmpty(whereClause), "whereClause cannot not be empty");
