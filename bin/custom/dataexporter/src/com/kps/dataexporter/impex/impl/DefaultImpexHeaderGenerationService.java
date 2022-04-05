@@ -59,6 +59,8 @@ public class DefaultImpexHeaderGenerationService implements ImpexHeaderGeneratio
                 .replace("owner(&Item)", "")
                 .replace("modifiedtime[dateformat=dd.MM.yyyy hh:mm:ss];", "")
                 .replace("creationtime[forceWrite=true,dateformat=dd.MM.yyyy hh:mm:ss];", "")
+                .replace("creationtime[forceWrite=true,dateformat=dd.MM.yyyy hh:mm:ss];", "")
+                .replace("creationtime[forceWrite = true, dateformat = dd.MM.yyyy hh:mm:ss];", "")
                 .replace("&Item;", "");
     }
 
