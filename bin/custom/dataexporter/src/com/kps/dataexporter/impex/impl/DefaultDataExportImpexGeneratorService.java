@@ -47,6 +47,8 @@ public class DefaultDataExportImpexGeneratorService implements DataExportImpexGe
     public ExportResult exportDataDump(DataDumpExportType dumpExportType, CatalogVersionModel catalogVersionModel) {
         DumpImpexGenerator dumpImpexGenerator = getDumpExportStrategiesMap().get(dumpExportType);
         String impexDump = dumpImpexGenerator.generateDump(catalogVersionModel);
+        LOG.info("Impex that will be used to export data:");
+        LOG.info(impexDump);
 
         ExportResult exportResult = runExport(impexDump);
         printExportResult(exportResult);
