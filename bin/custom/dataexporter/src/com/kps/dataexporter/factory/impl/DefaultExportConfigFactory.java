@@ -16,7 +16,7 @@ public class DefaultExportConfigFactory implements ExportConfigFactory {
         ExportConfig exportConfig = new ExportConfig();
         exportConfig.setSynchronous(true);
         exportConfig.setSingleFile(true);
-        exportConfig.setValidationMode(ExportConfig.ValidationMode.STRICT);
+        exportConfig.setValidationMode(ExportConfig.ValidationMode.RELAXED);
         exportConfig.setScript(new StreamBasedImpExResource(new ByteArrayInputStream(exportHeader.getBytes()), UTF_8));
 
         return exportConfig;
